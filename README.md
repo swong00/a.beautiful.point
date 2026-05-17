@@ -65,3 +65,15 @@ Validation:
 pnpm run check
 pnpm run build
 ```
+
+## Deployment
+
+The public site is configured for GitHub Pages at:
+
+```text
+https://abeautifulpoint.com
+```
+
+Deployment runs from `.github/workflows/deploy-pages.yml` on pushes to `main`. Astro builds static output into `dist/`, and `public/CNAME` ensures the published artifact carries the custom domain.
+
+In GitHub repository settings, set Pages to deploy from GitHub Actions and set the custom domain to `abeautifulpoint.com`.

@@ -54,7 +54,7 @@ The first version of this tree is implemented. Keep new additions inside this sh
 - Interactives: small, reusable components embedded directly in essays and visuals.
 - Data: CSV and JSON first.
 - Larger analysis: local notebooks or scripts that export static artifacts into the site.
-- Hosting: Vercel or Cloudflare Pages later.
+- Hosting: GitHub Pages with the custom domain `abeautifulpoint.com`.
 
 ## Boundaries
 
