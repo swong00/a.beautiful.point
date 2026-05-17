@@ -1,0 +1,21 @@
+---
+import BaseLayout from "@components/layout/BaseLayout.astro";
+import ArtifactList from "@components/layout/ArtifactList.astro";
+import { getCollection } from "astro:content";
+
+const artifacts = (await getCollection("notes")).sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout title="Notes" description="Field notes, reading notes, and lightweight observations.">
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Working notes</p>
+      <h1>Notes</h1>
+      <p class="lede">
+        Smaller observations that preserve signal before it becomes a full
+        essay or visual artifact.
+      </p>
+      <ArtifactList artifacts={artifacts} basePath="/notes" />
+    </div>
+  </section>
+</BaseLayout>

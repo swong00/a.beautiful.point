@@ -1,0 +1,76 @@
+---
+import BaseLayout from "@components/layout/BaseLayout.astro";
+import ArtifactList from "@components/layout/ArtifactList.astro";
+import SystemMap from "@components/visuals/SystemMap.astro";
+import { getCollection } from "astro:content";
+
+const manifesto = (await getCollection("manifesto")).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+const visuals = (await getCollection("visuals")).sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout description="Visual explanations for complex systems.">
+  <section class="section">
+    <div class="wrap split">
+      <div>
+        <p class="eyebrow">Visual systems intelligence lab</p>
+        <h1>A Beautiful Point</h1>
+        <p class="lede">
+          Visual explanations for complex systems.
+        </p>
+        <p>
+          I explore how data, software, and interactive infographics can make
+          real-world systems easier to understand, operate, and improve - from
+          reliability engineering to healthcare, manufacturing, infrastructure,
+          and AI.
+        </p>
+        <div class="button-row" aria-label="Primary actions">
+          <a class="button-link" href="/manifesto">Start with the manifesto</a>
+          <a class="text-link" href="/visuals">Explore the visuals</a>
+          <a class="text-link" href="/notes">Follow the lab notes</a>
+        </div>
+      </div>
+      <SystemMap />
+    </div>
+  </section>
+
+  <section class="section section--white">
+    <div class="wrap">
+      <p class="eyebrow">First shape</p>
+      <h2>Make the hidden structure visible.</h2>
+      <p class="lede">
+        Every artifact starts with a messy real-world problem, finds the system
+        map inside it, and ends with a practical point of action.
+      </p>
+      <div class="grid" aria-label="Content pillars">
+        <article class="artifact-card">
+          <div class="meta"><span>systems</span></div>
+          <h3>Beautiful Systems</h3>
+          <p>Design surfaces that expose intent, flow, failure, and leverage.</p>
+          <p class="point">The point is where structure becomes usable.</p>
+        </article>
+        <article class="artifact-card">
+          <div class="meta"><span>data</span></div>
+          <h3>Beautiful Data</h3>
+          <p>Turn noisy events, logs, and metrics into evidence people can reason with.</p>
+          <p class="point">The point is where signal compresses judgment.</p>
+        </article>
+        <article class="artifact-card">
+          <div class="meta"><span>interfaces</span></div>
+          <h3>Beautiful Interfaces</h3>
+          <p>Use diagrams and interaction as reasoning tools, not decoration.</p>
+          <p class="point">The point is where seeing changes what people do.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Launch shelf</p>
+      <h2>Seeds for the first public artifacts.</h2>
+      <ArtifactList artifacts={[...manifesto, ...visuals]} />
+    </div>
+  </section>
+</BaseLayout>

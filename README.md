@@ -20,13 +20,24 @@ The editorial promise is simple:
 
 ## Current State
 
-This repository is intentionally at foundation stage. The durable working memory and execution-plan system now exist; the public site runtime has not been installed yet.
+This repository now has its first static public site skeleton:
 
-Bootstrap environment observed on 2026-05-17:
+- Astro `6.3.3` with MDX enabled.
+- Local MDX content collections for manifesto, essays, visuals, labs, and notes.
+- Static routes for `/`, `/manifesto`, `/essays`, `/visuals`, `/labs`, `/notes`, and `/about`.
+- A shared layout, minimal visual identity, and first system-map visual.
 
-- `node --version` works and returned `v24.14.0`.
-- `npm`, `pnpm`, `yarn`, and `corepack` were not available on `PATH`.
-- The first active execution plan records package-manager setup as the first validation boundary.
+Local environment resolved on 2026-05-17:
+
+- `pnpm` `11.1.2` is installed at `$HOME/.local/share/pnpm/bin/pnpm`.
+- A user-local Node `v24.14.0` is installed at `$HOME/Library/pnpm/bin/node`.
+- Prefer this PATH when running site commands from Codex:
+
+```sh
+export PATH="$HOME/Library/pnpm/bin:$HOME/.local/share/pnpm/bin:$PATH"
+```
+
+The user-local Node matters because the Codex-bundled Node hit a macOS native-module loading issue with Rollup.
 
 ## First Product Shape
 
@@ -41,3 +52,16 @@ The intended first public version is small, serious, and static-first:
 
 Default stack direction: Astro, MDX, local CSV/JSON data, Mermaid/SVG diagrams, and small interactive components. Do not add a CMS, database, accounts, or backend until a specific artifact requires it.
 
+## Local Development
+
+```sh
+export PATH="$HOME/Library/pnpm/bin:$HOME/.local/share/pnpm/bin:$PATH"
+pnpm run dev
+```
+
+Validation:
+
+```sh
+pnpm run check
+pnpm run build
+```

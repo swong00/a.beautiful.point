@@ -1,0 +1,162 @@
+<figure class="system-map" aria-labelledby="system-map-title">
+  <svg viewBox="0 0 920 560" role="img">
+    <title id="system-map-title">Problem to action visual system map</title>
+    <desc>
+      A left-to-right flow from real-world problem through data, system model,
+      interactive explanation, beautiful point, software pattern, and action.
+    </desc>
+    <defs>
+      <marker
+        id="arrow"
+        viewBox="0 0 10 10"
+        refX="8"
+        refY="5"
+        markerWidth="7"
+        markerHeight="7"
+        orient="auto-start-reverse"
+      >
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="#111418"></path>
+      </marker>
+    </defs>
+    <rect class="map-bg" x="0" y="0" width="920" height="560" rx="14"></rect>
+    <path class="map-line" d="M118 280 H790" marker-end="url(#arrow)"></path>
+    <path class="map-thread thread-one" d="M256 164 C360 96 488 104 596 158"></path>
+    <path class="map-thread thread-two" d="M294 398 C414 468 564 462 684 386"></path>
+    <g class="node problem" transform="translate(68 230)">
+      <rect width="124" height="100" rx="8"></rect>
+      <text x="62" y="39">Problem</text>
+      <text x="62" y="65">messy world</text>
+    </g>
+    <g class="node data" transform="translate(206 130)">
+      <circle cx="58" cy="58" r="58"></circle>
+      <text x="58" y="53">Data</text>
+      <text x="58" y="78">evidence</text>
+    </g>
+    <g class="node system" transform="translate(356 230)">
+      <rect width="148" height="100" rx="8"></rect>
+      <text x="74" y="39">System</text>
+      <text x="74" y="65">structure</text>
+    </g>
+    <g class="node visual" transform="translate(522 130)">
+      <circle cx="58" cy="58" r="58"></circle>
+      <text x="58" y="53">Visual</text>
+      <text x="58" y="78">explanation</text>
+    </g>
+    <g class="node point" transform="translate(654 230)">
+      <rect width="148" height="100" rx="8"></rect>
+      <text x="74" y="39">Point</text>
+      <text x="74" y="65">leverage</text>
+    </g>
+    <g class="node software" transform="translate(440 372)">
+      <rect width="150" height="80" rx="8"></rect>
+      <text x="75" y="34">Software</text>
+      <text x="75" y="58">pattern</text>
+    </g>
+    <g class="action-dot" transform="translate(806 280)">
+      <circle r="36"></circle>
+      <text y="5">Act</text>
+    </g>
+  </svg>
+  <figcaption>
+    Problem -> data -> system -> visual insight -> software pattern -> action.
+  </figcaption>
+</figure>
+
+<style>
+  .system-map {
+    margin: 0;
+  }
+
+  svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 20px 50px rgba(17, 20, 24, 0.12));
+  }
+
+  .map-bg {
+    fill: #fffdf8;
+    stroke: #111418;
+    stroke-width: 2;
+  }
+
+  .map-line,
+  .map-thread {
+    fill: none;
+    stroke: #111418;
+    stroke-width: 3;
+  }
+
+  .map-thread {
+    stroke-dasharray: 8 12;
+    opacity: 0.45;
+  }
+
+  .thread-one {
+    stroke: #087f8c;
+  }
+
+  .thread-two {
+    stroke: #b84a62;
+  }
+
+  .node rect,
+  .node circle {
+    stroke: #111418;
+    stroke-width: 2;
+  }
+
+  .problem rect {
+    fill: #f2dfc2;
+  }
+
+  .data circle {
+    fill: #d5e8ea;
+  }
+
+  .system rect {
+    fill: #f8f0d8;
+  }
+
+  .visual circle {
+    fill: #dbe4f2;
+  }
+
+  .point rect {
+    fill: #ead5db;
+  }
+
+  .software rect {
+    fill: #dde8d3;
+  }
+
+  text {
+    fill: #111418;
+    font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+    font-size: 19px;
+    font-weight: 760;
+    text-anchor: middle;
+  }
+
+  .node text + text {
+    fill: #4e5965;
+    font-size: 14px;
+    font-weight: 680;
+  }
+
+  .action-dot circle {
+    fill: #c27a14;
+    stroke: #111418;
+    stroke-width: 2;
+  }
+
+  .action-dot text {
+    font-size: 17px;
+  }
+
+  figcaption {
+    margin-top: 0.85rem;
+    color: #4e5965;
+    font-size: 0.95rem;
+  }
+</style>

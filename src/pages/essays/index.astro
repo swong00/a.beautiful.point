@@ -1,0 +1,21 @@
+---
+import BaseLayout from "@components/layout/BaseLayout.astro";
+import ArtifactList from "@components/layout/ArtifactList.astro";
+import { getCollection } from "astro:content";
+
+const artifacts = (await getCollection("essays")).sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout title="Essays" description="Durable thinking about systems, data, AI, and reliability.">
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Durable thinking</p>
+      <h1>Essays</h1>
+      <p class="lede">
+        Long-form systems arguments with enough structure to teach and enough
+        practicality to change design decisions.
+      </p>
+      <ArtifactList artifacts={artifacts} basePath="/essays" />
+    </div>
+  </section>
+</BaseLayout>

@@ -6,7 +6,7 @@ Last updated: 2026-05-17
 
 | Plan | Domain | Priority | Status | Next action |
 | --- | --- | --- | --- | --- |
-| [001-static-site-skeleton.md](active/001-static-site-skeleton.md) | site | P0 | active | Resolve package manager and scaffold static-first Astro/MDX site shell |
+| N/A | N/A | N/A | N/A | N/A |
 
 ## Blocked
 
@@ -25,11 +25,10 @@ Last updated: 2026-05-17
 
 | Plan | Domain | Completed | Evidence |
 | --- | --- | --- | --- |
-| N/A | N/A | N/A | N/A |
+| [001-static-site-skeleton.md](completed/001-static-site-skeleton.md) | site | 2026-05-17 | `pnpm run check`, `pnpm run build`, and local browser route smoke checks passed |
 
 ## Notes
 
 - Promote backlog items to `active/` only when a session is ready to execute them.
 - Move plans to `blocked/` when external conditions prevent progress.
 - Keep this dashboard synchronized with plan status before stopping work.
-

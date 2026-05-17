@@ -1,0 +1,21 @@
+---
+import BaseLayout from "@components/layout/BaseLayout.astro";
+import ArtifactList from "@components/layout/ArtifactList.astro";
+import { getCollection } from "astro:content";
+
+const artifacts = (await getCollection("labs")).sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout title="Labs" description="Prototypes, notebooks, open fragments, and experiments.">
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Prototypes</p>
+      <h1>Labs</h1>
+      <p class="lede">
+        Small working fragments where an essay can become a sketch, model,
+        notebook, or tool.
+      </p>
+      <ArtifactList artifacts={artifacts} basePath="/labs" />
+    </div>
+  </section>
+</BaseLayout>

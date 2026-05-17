@@ -1,0 +1,29 @@
+---
+import BaseLayout from "@components/layout/BaseLayout.astro";
+import ArtifactList from "@components/layout/ArtifactList.astro";
+import SystemMap from "@components/visuals/SystemMap.astro";
+import { getCollection } from "astro:content";
+
+const artifacts = (await getCollection("visuals")).sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout title="Visuals" description="Interactive explainers, diagrams, infographics, and simulations.">
+  <section class="section">
+    <div class="wrap split">
+      <div>
+        <p class="eyebrow">Visual explanations</p>
+        <h1>Visuals</h1>
+        <p class="lede">
+          Diagrams, explainers, and simulations that make a system easier to
+          inspect than a paragraph can.
+        </p>
+      </div>
+      <SystemMap />
+    </div>
+  </section>
+  <section class="section section--white">
+    <div class="wrap">
+      <ArtifactList artifacts={artifacts} basePath="/visuals" />
+    </div>
+  </section>
+</BaseLayout>

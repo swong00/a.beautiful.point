@@ -1,0 +1,45 @@
+---
+interface Artifact {
+  id: string;
+  data: {
+    title: string;
+    description: string;
+    section: string;
+    status: string;
+    beautifulPoint: string;
+    tags: string[];
+  };
+}
+
+interface Props {
+  artifacts: Artifact[];
+  basePath?: string;
+}
+
+const { artifacts, basePath } = Astro.props;
+---
+
+<div class="grid">
+  {
+    artifacts.map((artifact) => {
+      const href = basePath
+        ? basePath === "/manifesto"
+          ? "/manifesto"
+          : `${basePath}/${artifact.id}`
+        : artifact.data.section === "manifesto"
+          ? "/manifesto"
+          : `/${artifact.data.section}/${artifact.id}`;
+      return (
+        <a class="artifact-card" href={href}>
+          <div class="meta">
+            <span>{artifact.data.section}</span>
+            <span>{artifact.data.status}</span>
+          </div>
+          <h3>{artifact.data.title}</h3>
+          <p>{artifact.data.description}</p>
+          <p class="point">{artifact.data.beautifulPoint}</p>
+        </a>
+      );
+    })
+  }
+</div>

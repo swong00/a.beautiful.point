@@ -4,13 +4,17 @@ This repo should become a static-first visual intelligence lab, not an applicati
 
 ## Current Architecture
 
-The current committed architecture is documentation and process only:
+The current committed architecture is a static-first Astro site plus repo-native operating memory:
 
 - `AGENTS.md` is the agent entry point.
 - `docs/` is the source of truth for vision, content strategy, operating model, decisions, and execution plans.
-- No runtime framework, dependency lockfile, or deployed site exists yet.
+- `src/pages/` owns the static route surface.
+- `src/content/` stores local MDX artifacts for manifesto, essays, visuals, labs, and notes.
+- `src/content.config.ts` defines the content collections.
+- `src/components/layout/` and `src/components/visuals/` hold shared presentation and visual-system pieces.
+- `public/` holds static public assets.
 
-This is intentional. The next plan should add the smallest site runtime that lets the lab publish and validate public artifacts.
+The site has no CMS, database, accounts, backend service, analytics, or deployment adapter.
 
 ## Target Shape
 
@@ -40,7 +44,7 @@ This is intentional. The next plan should add the smallest site runtime that let
   public/
 ```
 
-The `src/` and `public/` tree is planned, not yet implemented.
+The first version of this tree is implemented. Keep new additions inside this shape unless a future execution plan records a stronger reason to change it.
 
 ## Technical Defaults
 
@@ -73,13 +77,13 @@ The `src/` and `public/` tree is planned, not yet implemented.
 
 ## Validation Direction
 
-The first site plan should introduce commands equivalent to:
+Current validation commands:
 
 ```sh
+export PATH="$HOME/Library/pnpm/bin:$HOME/.local/share/pnpm/bin:$PATH"
 node --version
-npm run build
-npm run check
+pnpm run check
+pnpm run build
 ```
 
-If the selected package manager differs, record that decision in [docs/decisions](docs/decisions) and update the active plan.
-
+Frontend changes should also receive a local browser smoke check against the route surface once `pnpm run dev` is running.
