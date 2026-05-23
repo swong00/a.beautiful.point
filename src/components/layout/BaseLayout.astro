@@ -65,21 +65,28 @@ const isActive = (href: string) =>
 <style is:global>
   :root {
     color-scheme: light;
-    --ink: #111418;
-    --muted: #4e5965;
-    --paper: #f7f5ef;
-    --surface: #fffdf8;
-    --line: #d7d0c3;
-    --teal: #087f8c;
-    --teal-deep: #075c66;
-    --amber: #c27a14;
-    --rose: #b84a62;
+    --ink: #201f1d;
+    --muted: #716e66;
+    --paper: #faf9f5;
+    --surface: #f6f2ea;
+    --line: #d9d2c6;
+    --teal: #1f6f7a;
+    --teal-deep: #174f57;
+    --amber: #c07a1a;
+    --rose: #9d4e5d;
     --blue: #2d5f9a;
     --green: #557a32;
-    --shadow: 0 18px 60px rgba(17, 20, 24, 0.12);
-    font-family:
+    --shadow: none;
+    --serif:
+      "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia,
+      serif;
+    --sans:
       Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
       sans-serif;
+    --mono:
+      "Courier Prime", "Courier New", ui-monospace, SFMono-Regular, Menlo, Consolas,
+      monospace;
+    font-family: var(--serif);
     font-size: 16px;
     line-height: 1.5;
   }
@@ -102,10 +109,10 @@ const isActive = (href: string) =>
     pointer-events: none;
     content: "";
     background:
-      linear-gradient(rgba(17, 20, 24, 0.035) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(17, 20, 24, 0.035) 1px, transparent 1px);
+      linear-gradient(rgba(32, 31, 29, 0.026) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(32, 31, 29, 0.026) 1px, transparent 1px);
     background-size: 42px 42px;
-    mask-image: linear-gradient(to bottom, black, transparent 70%);
+    mask-image: linear-gradient(to bottom, black, transparent 58%);
   }
 
   a {
@@ -131,8 +138,8 @@ const isActive = (href: string) =>
     justify-content: space-between;
     gap: 1.5rem;
     padding: 0.9rem clamp(1rem, 3vw, 3rem);
-    border-bottom: 1px solid rgba(17, 20, 24, 0.12);
-    background: rgba(247, 245, 239, 0.9);
+    border-bottom: 1px solid rgba(32, 31, 29, 0.12);
+    background: rgba(250, 249, 245, 0.92);
     backdrop-filter: blur(14px);
   }
 
@@ -142,7 +149,8 @@ const isActive = (href: string) =>
     gap: 0.65rem;
     min-width: max-content;
     color: var(--ink);
-    font-weight: 760;
+    font-family: var(--serif);
+    font-weight: 400;
     text-decoration: none;
   }
 
@@ -152,9 +160,7 @@ const isActive = (href: string) =>
     border: 2px solid var(--ink);
     border-radius: 50%;
     background: var(--amber);
-    box-shadow:
-      0 0 0 4px var(--paper),
-      0 0 0 5px var(--ink);
+    box-shadow: 0 0 0 4px var(--paper);
   }
 
   nav {
@@ -167,8 +173,9 @@ const isActive = (href: string) =>
   nav a {
     border-bottom: 2px solid transparent;
     color: var(--muted);
-    font-size: 0.92rem;
-    font-weight: 680;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    font-weight: 500;
     text-decoration: none;
   }
 
@@ -187,7 +194,7 @@ const isActive = (href: string) =>
   }
 
   .section--white {
-    border-block: 1px solid rgba(17, 20, 24, 0.1);
+    border-block: 1px solid rgba(32, 31, 29, 0.1);
     background: var(--surface);
   }
 
@@ -204,8 +211,9 @@ const isActive = (href: string) =>
   .eyebrow {
     margin: 0 0 0.7rem;
     color: var(--teal-deep);
+    font-family: var(--mono);
     font-size: 0.8rem;
-    font-weight: 820;
+    font-weight: 500;
     letter-spacing: 0;
     text-transform: uppercase;
   }
@@ -215,27 +223,29 @@ const isActive = (href: string) =>
   h3 {
     margin: 0;
     color: var(--ink);
+    font-family: var(--serif);
+    font-weight: 400;
     line-height: 1.04;
     letter-spacing: 0;
   }
 
   h1 {
     max-width: 860px;
-    font-size: clamp(3.1rem, 12vw, 8.6rem);
+    font-size: 6.25rem;
   }
 
   h2 {
-    font-size: clamp(2rem, 5vw, 4rem);
+    font-size: 3.4rem;
   }
 
   h3 {
-    font-size: clamp(1.2rem, 2vw, 1.7rem);
+    font-size: 1.45rem;
   }
 
   .lede {
     max-width: 760px;
-    color: #323a42;
-    font-size: clamp(1.15rem, 2vw, 1.45rem);
+    color: #3f3b36;
+    font-size: 1.35rem;
   }
 
   .button-row {
@@ -250,14 +260,16 @@ const isActive = (href: string) =>
     display: inline-flex;
     align-items: center;
     min-height: 2.75rem;
-    font-weight: 760;
+    font-family: var(--mono);
+    font-size: 0.86rem;
+    font-weight: 500;
     text-decoration: none;
   }
 
   .button-link {
     padding: 0 1rem;
     border: 1px solid var(--ink);
-    border-radius: 8px;
+    border-radius: 4px;
     background: var(--ink);
     color: var(--surface);
   }
@@ -294,9 +306,9 @@ const isActive = (href: string) =>
     min-height: 18rem;
     padding: 1.1rem;
     border: 1px solid var(--line);
-    border-radius: 8px;
+    border-radius: 4px;
     background: var(--surface);
-    box-shadow: 0 10px 30px rgba(17, 20, 24, 0.06);
+    box-shadow: var(--shadow);
     text-decoration: none;
   }
 
@@ -315,8 +327,9 @@ const isActive = (href: string) =>
     gap: 0.5rem;
     margin-bottom: 1rem;
     color: var(--teal-deep);
+    font-family: var(--mono);
     font-size: 0.78rem;
-    font-weight: 780;
+    font-weight: 500;
     text-transform: uppercase;
   }
 
@@ -336,12 +349,12 @@ const isActive = (href: string) =>
 
   .prose h1 {
     margin-bottom: 1.2rem;
-    font-size: clamp(2.4rem, 7vw, 5.6rem);
+    font-size: 4.25rem;
   }
 
   .prose h2 {
     margin-top: 3rem;
-    font-size: clamp(1.65rem, 4vw, 2.75rem);
+    font-size: 2.35rem;
   }
 
   .prose p,
@@ -364,8 +377,9 @@ const isActive = (href: string) =>
     gap: 0.6rem;
     margin: 0 0 1rem;
     color: var(--teal-deep);
+    font-family: var(--mono);
     font-size: 0.82rem;
-    font-weight: 760;
+    font-weight: 500;
   }
 
   .site-footer {
@@ -375,7 +389,7 @@ const isActive = (href: string) =>
     justify-content: space-between;
     gap: 1rem;
     padding: 2rem clamp(1rem, 3vw, 3rem);
-    border-top: 1px solid rgba(17, 20, 24, 0.12);
+    border-top: 1px solid rgba(32, 31, 29, 0.12);
   }
 
   .site-footer p {
@@ -403,7 +417,37 @@ const isActive = (href: string) =>
     }
 
     h1 {
-      font-size: clamp(3rem, 17vw, 5.2rem);
+      font-size: 4.2rem;
+    }
+
+    h2 {
+      font-size: 2.55rem;
+    }
+
+    .lede {
+      font-size: 1.2rem;
+    }
+
+    .prose h1 {
+      font-size: 3.1rem;
+    }
+
+    .prose h2 {
+      font-size: 2rem;
+    }
+  }
+
+  @media (max-width: 520px) {
+    h1 {
+      font-size: 3.25rem;
+    }
+
+    h2 {
+      font-size: 2.1rem;
+    }
+
+    h3 {
+      font-size: 1.3rem;
     }
   }
 </style>

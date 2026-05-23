@@ -1,0 +1,202 @@
+<figure class="signal-field" aria-labelledby="signal-field-title">
+  <svg viewBox="0 0 760 620" role="img">
+    <title id="signal-field-title">Signal field resolving into a beautiful point</title>
+    <desc>
+      A sparse field of system signals, edges, and labels converging into one
+      actionable point.
+    </desc>
+    <defs>
+      <pattern id="signal-grid" width="38" height="38" patternUnits="userSpaceOnUse">
+        <path d="M38 0H0V38" fill="none" stroke="#dfd9cf" stroke-width="1"></path>
+      </pattern>
+    </defs>
+    <rect class="field-paper" x="0" y="0" width="760" height="620" rx="2"></rect>
+    <rect class="field-grid" x="0" y="0" width="760" height="620"></rect>
+
+    <g class="quiet-lines" aria-hidden="true">
+      <path d="M92 418 C174 298 244 322 328 214 C426 88 528 118 660 72"></path>
+      <path d="M78 214 C168 238 214 172 302 176 C412 182 470 270 658 224"></path>
+      <path d="M128 502 C214 452 284 478 370 390 C456 302 536 324 666 298"></path>
+      <path d="M190 94 C252 176 318 154 380 236 C448 326 552 370 650 452"></path>
+      <path d="M104 332 C212 356 286 300 382 318 C488 338 552 426 680 386"></path>
+    </g>
+
+    <g class="signal-cluster cluster-left" aria-hidden="true">
+      <circle cx="95" cy="416" r="4"></circle>
+      <circle cx="136" cy="354" r="2.5"></circle>
+      <circle cx="164" cy="316" r="3"></circle>
+      <circle cx="212" cy="330" r="2"></circle>
+      <circle cx="122" cy="502" r="3"></circle>
+      <circle cx="178" cy="476" r="2.5"></circle>
+      <line x1="95" y1="416" x2="136" y2="354"></line>
+      <line x1="136" y1="354" x2="164" y2="316"></line>
+      <line x1="164" y1="316" x2="212" y2="330"></line>
+      <line x1="122" y1="502" x2="178" y2="476"></line>
+    </g>
+
+    <g class="signal-cluster cluster-mid" aria-hidden="true">
+      <circle cx="296" cy="178" r="4"></circle>
+      <circle cx="338" cy="214" r="2.5"></circle>
+      <circle cx="382" cy="318" r="4"></circle>
+      <circle cx="374" cy="390" r="2.5"></circle>
+      <circle cx="432" cy="292" r="3"></circle>
+      <line x1="296" y1="178" x2="338" y2="214"></line>
+      <line x1="338" y1="214" x2="382" y2="318"></line>
+      <line x1="382" y1="318" x2="374" y2="390"></line>
+      <line x1="382" y1="318" x2="432" y2="292"></line>
+    </g>
+
+    <g class="signal-cluster cluster-right" aria-hidden="true">
+      <circle cx="654" cy="74" r="2.5"></circle>
+      <circle cx="660" cy="224" r="3.5"></circle>
+      <circle cx="666" cy="298" r="2.5"></circle>
+      <circle cx="650" cy="452" r="3"></circle>
+      <circle cx="586" cy="374" r="2"></circle>
+      <line x1="660" y1="224" x2="666" y2="298"></line>
+      <line x1="666" y1="298" x2="586" y2="374"></line>
+      <line x1="586" y1="374" x2="650" y2="452"></line>
+    </g>
+
+    <g class="beautiful-point">
+      <circle class="point-ring" cx="504" cy="306" r="72"></circle>
+      <circle class="point-ring point-ring--thin" cx="504" cy="306" r="112"></circle>
+      <circle class="point-core" cx="504" cy="306" r="9"></circle>
+      <path class="point-axis" d="M504 188V424"></path>
+      <path class="point-axis" d="M386 306H622"></path>
+    </g>
+
+    <g class="field-labels">
+      <text x="54" y="58">01</text>
+      <text x="92" y="58">messy signals</text>
+      <text x="270" y="146">02</text>
+      <text x="308" y="146">system map</text>
+      <text x="514" y="276">03</text>
+      <text x="552" y="276">beautiful point</text>
+      <text x="560" y="480">04</text>
+      <text x="598" y="480">action</text>
+    </g>
+  </svg>
+  <figcaption>
+    Many traces, one point: evidence -> structure -> insight -> action.
+  </figcaption>
+</figure>
+
+<style>
+  .signal-field {
+    margin: 0;
+  }
+
+  svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .field-paper {
+    fill: #f4f1ea;
+    stroke: #d9d2c6;
+    stroke-width: 1;
+  }
+
+  .field-grid {
+    fill: url("#signal-grid");
+    opacity: 0.45;
+  }
+
+  .quiet-lines path {
+    fill: none;
+    stroke: #9b9991;
+    stroke-linecap: round;
+    stroke-width: 1.1;
+    opacity: 0.38;
+  }
+
+  .quiet-lines path:nth-child(2) {
+    stroke: #1f6f7a;
+    opacity: 0.28;
+  }
+
+  .quiet-lines path:nth-child(3) {
+    stroke: #9d4e5d;
+    opacity: 0.3;
+  }
+
+  .quiet-lines path:nth-child(4) {
+    stroke: #557a32;
+    opacity: 0.26;
+  }
+
+  .signal-cluster circle {
+    fill: #201f1d;
+    opacity: 0.68;
+  }
+
+  .signal-cluster line {
+    stroke: #201f1d;
+    stroke-width: 0.8;
+    opacity: 0.18;
+  }
+
+  .cluster-mid circle {
+    fill: #1f6f7a;
+  }
+
+  .cluster-right circle {
+    fill: #9d4e5d;
+  }
+
+  .point-ring {
+    fill: none;
+    stroke: #c07a1a;
+    stroke-width: 1.2;
+    opacity: 0.82;
+  }
+
+  .point-ring--thin {
+    stroke: #201f1d;
+    stroke-width: 0.8;
+    opacity: 0.18;
+  }
+
+  .point-core {
+    fill: #201f1d;
+  }
+
+  .point-axis {
+    fill: none;
+    stroke: #201f1d;
+    stroke-dasharray: 3 9;
+    stroke-width: 0.9;
+    opacity: 0.26;
+  }
+
+  .field-labels text {
+    fill: #807d75;
+    font-family:
+      "Courier Prime", "Courier New", ui-monospace, SFMono-Regular, monospace;
+    font-size: 15px;
+    letter-spacing: 0;
+  }
+
+  .field-labels text:nth-child(odd) {
+    fill: #201f1d;
+  }
+
+  figcaption {
+    margin-top: 0.85rem;
+    color: #716e66;
+    font-family:
+      "Courier Prime", "Courier New", ui-monospace, SFMono-Regular, monospace;
+    font-size: 0.82rem;
+  }
+
+  @media (max-width: 560px) {
+    svg {
+      max-height: 8.5rem;
+    }
+
+    figcaption {
+      display: none;
+    }
+  }
+</style>

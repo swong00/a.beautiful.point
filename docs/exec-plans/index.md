@@ -1,6 +1,6 @@
 # Execution Plan Index
 
-Last updated: 2026-05-17
+Last updated: 2026-05-23
 
 ## Active
 
@@ -26,6 +26,7 @@ Last updated: 2026-05-17
 | Plan | Domain | Completed | Evidence |
 | --- | --- | --- | --- |
 | [001-static-site-skeleton.md](completed/001-static-site-skeleton.md) | site | 2026-05-17 | `pnpm run check`, `pnpm run build`, and local browser route smoke checks passed |
+| [005-homepage-way-of-code-redesign.md](completed/005-homepage-way-of-code-redesign.md) | site | 2026-05-23 | `pnpm run check`, `pnpm run build`, and desktop/mobile homepage browser smoke checks passed |
 
 ## Notes
 

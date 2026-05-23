@@ -1,76 +1,459 @@
 ---
 import BaseLayout from "@components/layout/BaseLayout.astro";
-import ArtifactList from "@components/layout/ArtifactList.astro";
-import SystemMap from "@components/visuals/SystemMap.astro";
+import SignalField from "@components/visuals/SignalField.astro";
 import { getCollection } from "astro:content";
 
 const manifesto = (await getCollection("manifesto")).sort(
   (a, b) => a.data.order - b.data.order,
 );
 const visuals = (await getCollection("visuals")).sort((a, b) => a.data.order - b.data.order);
+const launchArtifacts = [...manifesto, ...visuals];
+const railItems = [
+  { label: "01", href: "#point" },
+  { label: "02", href: "#method" },
+  { label: "03", href: "#shelf" },
+  { label: "04", href: "#notes" },
+];
+
+const hrefFor = (artifact: (typeof launchArtifacts)[number]) =>
+  artifact.data.section === "manifesto"
+    ? "/manifesto"
+    : `/${artifact.data.section}/${artifact.id}`;
 ---
 
 <BaseLayout description="Visual explanations for complex systems.">
-  <section class="section">
-    <div class="wrap split">
-      <div>
+  <section class="home-hero" id="point" aria-labelledby="home-title">
+    <nav class="home-rail" aria-label="Homepage sections">
+      {railItems.map((item) => <a href={item.href}>{item.label}</a>)}
+    </nav>
+    <div class="home-hero__inner">
+      <div class="home-copy">
         <p class="eyebrow">Visual systems intelligence lab</p>
-        <h1>A Beautiful Point</h1>
-        <p class="lede">
-          Visual explanations for complex systems.
+        <h1 id="home-title">A Beautiful Point</h1>
+        <p class="home-deck">
+          Find the point where data becomes insight, insight becomes software,
+          and software changes reality.
         </p>
         <p>
-          I explore how data, software, and interactive infographics can make
-          real-world systems easier to understand, operate, and improve - from
-          reliability engineering to healthcare, manufacturing, infrastructure,
-          and AI.
+          A public lab for making complex real-world systems legible through
+          diagrams, evidence, interactive explanation, and practical software
+          patterns.
         </p>
         <div class="button-row" aria-label="Primary actions">
-          <a class="button-link" href="/manifesto">Start with the manifesto</a>
-          <a class="text-link" href="/visuals">Explore the visuals</a>
-          <a class="text-link" href="/notes">Follow the lab notes</a>
+          <a class="button-link" href="/manifesto">Read the manifesto</a>
+          <a class="text-link" href="/visuals">Study the visuals</a>
         </div>
       </div>
-      <SystemMap />
+      <SignalField />
     </div>
   </section>
 
-  <section class="section section--white">
-    <div class="wrap">
-      <p class="eyebrow">First shape</p>
-      <h2>Make the hidden structure visible.</h2>
-      <p class="lede">
-        Every artifact starts with a messy real-world problem, finds the system
-        map inside it, and ends with a practical point of action.
+  <section class="home-section home-section--paper" id="method">
+    <div class="home-section__inner">
+      <div class="section-heading">
+        <p class="eyebrow">Method</p>
+        <h2>Start with the system, then find the point.</h2>
+      </div>
+      <p class="section-lede">
+        Every major artifact moves from a messy operating reality to a visible
+        structure, then into one practical point of action.
       </p>
-      <div class="grid" aria-label="Content pillars">
-        <article class="artifact-card">
-          <div class="meta"><span>systems</span></div>
-          <h3>Beautiful Systems</h3>
-          <p>Design surfaces that expose intent, flow, failure, and leverage.</p>
-          <p class="point">The point is where structure becomes usable.</p>
+      <div class="method-grid" aria-label="Artifact method">
+        <article>
+          <span>01</span>
+          <h3>Problem</h3>
+          <p>Name the real-world pressure, failure mode, workflow, or decision.</p>
         </article>
-        <article class="artifact-card">
-          <div class="meta"><span>data</span></div>
-          <h3>Beautiful Data</h3>
-          <p>Turn noisy events, logs, and metrics into evidence people can reason with.</p>
-          <p class="point">The point is where signal compresses judgment.</p>
+        <article>
+          <span>02</span>
+          <h3>Evidence</h3>
+          <p>Compress messy data into signals a human can inspect and contest.</p>
         </article>
-        <article class="artifact-card">
-          <div class="meta"><span>interfaces</span></div>
-          <h3>Beautiful Interfaces</h3>
-          <p>Use diagrams and interaction as reasoning tools, not decoration.</p>
-          <p class="point">The point is where seeing changes what people do.</p>
+        <article>
+          <span>03</span>
+          <h3>Structure</h3>
+          <p>Make the hidden model visible: flows, constraints, loops, and leverage.</p>
+        </article>
+        <article>
+          <span>04</span>
+          <h3>Action</h3>
+          <p>Turn the insight into a design principle, prototype, or next move.</p>
         </article>
       </div>
     </div>
   </section>
 
-  <section class="section">
-    <div class="wrap">
-      <p class="eyebrow">Launch shelf</p>
-      <h2>Seeds for the first public artifacts.</h2>
-      <ArtifactList artifacts={[...manifesto, ...visuals]} />
+  <section class="home-section" id="shelf">
+    <div class="home-section__inner">
+      <div class="section-heading">
+        <p class="eyebrow">Launch shelf</p>
+        <h2>Artifacts on the bench.</h2>
+      </div>
+      <ol class="artifact-index" aria-label="Launch artifacts">
+        {
+          launchArtifacts.map((artifact, index) => (
+            <li>
+              <a href={hrefFor(artifact)}>
+                <span class="artifact-number">{String(index + 1).padStart(2, "0")}</span>
+                <span>
+                  <span class="artifact-meta">
+                    <span>{artifact.data.section}</span>
+                    <span>{artifact.data.status}</span>
+                  </span>
+                  <h3>{artifact.data.title}</h3>
+                  <p>{artifact.data.description}</p>
+                  <p class="artifact-point">{artifact.data.beautifulPoint}</p>
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="home-section home-closing" id="notes">
+    <div class="home-section__inner home-closing__inner">
+      <p class="eyebrow">Field posture</p>
+      <h2>Calm systems thinking, made inspectable.</h2>
+      <p>
+        The lab stays static-first and repo-native: essays, diagrams, data
+        artifacts, and small prototypes that future readers and future agents
+        can inspect without hidden machinery.
+      </p>
+      <div class="button-row" aria-label="Secondary actions">
+        <a class="button-link" href="/notes">Read field notes</a>
+        <a class="text-link" href="/about">About the lab</a>
+      </div>
     </div>
   </section>
 </BaseLayout>
+
+<style>
+  .home-hero {
+    position: relative;
+    min-height: calc(100svh - 4.5rem);
+    padding: clamp(2rem, 4vw, 3.5rem) clamp(1rem, 4vw, 4rem)
+      clamp(1.5rem, 4vw, 3rem);
+  }
+
+  .home-rail {
+    position: absolute;
+    top: clamp(2rem, 4vw, 3.5rem);
+    left: clamp(1rem, 2.6vw, 2rem);
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    font-family: var(--mono);
+    font-size: 0.86rem;
+  }
+
+  .home-rail a {
+    width: 2.2rem;
+    border-left: 2px solid transparent;
+    color: var(--muted);
+    text-decoration: none;
+  }
+
+  .home-rail a:hover,
+  .home-rail a:focus-visible {
+    border-color: var(--ink);
+    color: var(--ink);
+  }
+
+  .home-hero__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(20rem, 1.15fr);
+    gap: clamp(2rem, 6vw, 5rem);
+    align-items: center;
+    width: min(1160px, calc(100% - 4rem));
+    margin: 0 auto;
+  }
+
+  .home-copy {
+    max-width: 34rem;
+  }
+
+  .home-copy h1 {
+    max-width: 32rem;
+    font-family: var(--serif);
+    font-size: 6.6rem;
+    font-weight: 400;
+    line-height: 0.88;
+  }
+
+  .home-copy > p:not(.eyebrow) {
+    font-size: 1.15rem;
+  }
+
+  .home-copy .button-row {
+    margin-top: 1.45rem;
+  }
+
+  .home-deck {
+    margin: 1.6rem 0 1.1rem;
+    color: var(--ink);
+    font-size: 1.6rem;
+    line-height: 1.26;
+  }
+
+  .home-section {
+    padding: clamp(4rem, 8vw, 7rem) clamp(1rem, 4vw, 4rem);
+    border-top: 1px solid rgba(32, 31, 29, 0.14);
+  }
+
+  .home-section--paper {
+    background: #f4f1ea;
+  }
+
+  .home-section__inner {
+    width: min(1040px, 100%);
+    margin: 0 auto;
+  }
+
+  .section-heading {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(16rem, 0.7fr);
+    gap: clamp(1.5rem, 5vw, 4rem);
+    align-items: end;
+  }
+
+  .section-heading h2 {
+    max-width: 44rem;
+    font-size: 4.2rem;
+    font-weight: 400;
+    line-height: 0.98;
+  }
+
+  .section-lede {
+    max-width: 38rem;
+    margin: 1.4rem 0 0 auto;
+    color: var(--ink);
+    font-size: 1.25rem;
+    line-height: 1.42;
+  }
+
+  .method-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+    border-top: 1px solid rgba(32, 31, 29, 0.26);
+  }
+
+  .method-grid article {
+    min-height: 13rem;
+    padding: 1rem 1.25rem 1rem 0;
+    border-right: 1px solid rgba(32, 31, 29, 0.16);
+  }
+
+  .method-grid article:last-child {
+    border-right: 0;
+  }
+
+  .method-grid span,
+  .artifact-number,
+  .artifact-meta {
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 0.82rem;
+  }
+
+  .method-grid h3 {
+    margin-top: 2.8rem;
+    font-size: 1.65rem;
+    font-weight: 400;
+  }
+
+  .method-grid p {
+    margin-bottom: 0;
+  }
+
+  .artifact-index {
+    margin: clamp(2.5rem, 5vw, 4rem) 0 0;
+    padding: 0;
+    border-top: 1px solid rgba(32, 31, 29, 0.26);
+    list-style: none;
+  }
+
+  .artifact-index li {
+    border-bottom: 1px solid rgba(32, 31, 29, 0.16);
+  }
+
+  .artifact-index a {
+    display: grid;
+    grid-template-columns: 4rem minmax(0, 1fr);
+    gap: clamp(1rem, 3vw, 2.5rem);
+    padding: 1.4rem 0 1.5rem;
+    text-decoration: none;
+  }
+
+  .artifact-index a:hover h3,
+  .artifact-index a:focus-visible h3 {
+    color: var(--teal-deep);
+  }
+
+  .artifact-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-bottom: 0.55rem;
+    text-transform: uppercase;
+  }
+
+  .artifact-index h3 {
+    max-width: 52rem;
+    font-size: 2.35rem;
+    font-weight: 400;
+    line-height: 1.02;
+  }
+
+  .artifact-index p {
+    max-width: 42rem;
+    margin: 0.65rem 0 0;
+    font-size: 1.05rem;
+  }
+
+  .artifact-index .artifact-point {
+    color: var(--ink);
+  }
+
+  .home-closing {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .home-closing .eyebrow,
+  .home-closing h2,
+  .home-closing p {
+    color: var(--paper);
+  }
+
+  .home-closing__inner {
+    max-width: 760px;
+  }
+
+  .home-closing h2 {
+    font-size: 4rem;
+    font-weight: 400;
+    line-height: 0.98;
+  }
+
+  .home-closing p:not(.eyebrow) {
+    font-size: 1.25rem;
+  }
+
+  .home-closing .button-link {
+    border-color: var(--paper);
+    background: var(--paper);
+    color: var(--ink);
+  }
+
+  .home-closing .text-link {
+    color: var(--paper);
+  }
+
+  @media (max-width: 920px) {
+    .home-hero {
+      padding-top: 1.25rem;
+    }
+
+    .home-rail {
+      position: static;
+      flex-direction: row;
+      width: min(100%, 38rem);
+      margin: 0 auto 1.4rem;
+    }
+
+    .home-rail a {
+      width: auto;
+      padding-right: 0.8rem;
+    }
+
+    .home-hero__inner,
+    .section-heading {
+      grid-template-columns: 1fr;
+      width: min(100%, 38rem);
+    }
+
+    .home-hero__inner {
+      gap: 1.5rem;
+    }
+
+    .home-copy h1 {
+      font-size: 4.8rem;
+    }
+
+    .section-heading h2,
+    .home-closing h2 {
+      font-size: 3rem;
+    }
+
+    .section-lede {
+      margin-left: 0;
+    }
+
+    .method-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .method-grid article:nth-child(2) {
+      border-right: 0;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .home-hero {
+      min-height: auto;
+      padding-bottom: 0.9rem;
+    }
+
+    .home-hero__inner,
+    .section-heading {
+      width: 100%;
+    }
+
+    .home-hero__inner {
+      gap: 1rem;
+    }
+
+    .home-copy h1 {
+      font-size: 3.1rem;
+    }
+
+    .home-deck {
+      font-size: 1.22rem;
+    }
+
+    .home-copy > p:not(.eyebrow) {
+      font-size: 1.05rem;
+    }
+
+    .section-heading h2,
+    .home-closing h2 {
+      font-size: 2.35rem;
+    }
+
+    .method-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .method-grid article,
+    .method-grid article:nth-child(2) {
+      border-right: 0;
+      border-bottom: 1px solid rgba(32, 31, 29, 0.14);
+    }
+
+    .method-grid article:last-child {
+      border-bottom: 0;
+    }
+
+    .artifact-index a {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+    }
+
+    .artifact-index h3 {
+      font-size: 1.9rem;
+    }
+  }
+</style>
