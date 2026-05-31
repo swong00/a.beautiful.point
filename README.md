@@ -15,6 +15,7 @@ The editorial promise is simple:
 - [docs/core-beliefs.md](docs/core-beliefs.md) is the north star for product, audience, voice, and taste.
 - [docs/content-system.md](docs/content-system.md) defines the site sections, artifact formats, and first content ideas.
 - [docs/agent-first-operating-model.md](docs/agent-first-operating-model.md) defines how humans and agents work in this repo.
+- [docs/data-analysis-sop.md](docs/data-analysis-sop.md) defines how validated data becomes reviewed, publishable insight.
 - [docs/exec-plans/README.md](docs/exec-plans/README.md) explains the execution-plan system.
 - [docs/exec-plans/index.md](docs/exec-plans/index.md) is the current plan dashboard.
 

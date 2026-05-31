@@ -1,12 +1,12 @@
 # Execution Plan Index
 
-Last updated: 2026-05-23
+Last updated: 2026-05-30
 
 ## Active
 
 | Plan | Domain | Priority | Status | Next action |
 | --- | --- | --- | --- | --- |
-| N/A | N/A | N/A | N/A | N/A |
+| [004-homelessness-map-explorer.md](active/004-homelessness-map-explorer.md) | visuals | P0 | active | Build raw download stage with HUD WAF handling |
 
 ## Blocked
 

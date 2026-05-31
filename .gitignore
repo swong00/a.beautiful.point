@@ -8,4 +8,10 @@ dist/
 .env.*
 !.env.example
 coverage/
-
+__pycache__/
+*.pyc
+.venv-data/
+data/homelessness/raw/hud/
+data/homelessness/raw/census/
+data/homelessness/raw/geography/
+data/homelessness/staging/

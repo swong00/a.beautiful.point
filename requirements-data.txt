@@ -1,0 +1,7 @@
+# Python runtime for repo-local data pipelines.
+#
+# Plan 004 starts with HUD homelessness data. Keep this file small and pinned:
+# add dependencies only when a pipeline step needs them.
+pandas==2.2.3
+python-calamine==0.6.2
+openpyxl==3.1.5
