@@ -1,6 +1,6 @@
 # Execution Plan Index
 
-Last updated: 2026-05-30
+Last updated: 2026-05-31
 
 ## Active
 
@@ -20,6 +20,7 @@ Last updated: 2026-05-30
 | --- | --- | --- | --- | --- |
 | [002-manifesto-launch-package.md](backlog/002-manifesto-launch-package.md) | content | P0 | backlog | First public artifacts define the lab's voice and editorial promise |
 | [003-visual-component-system.md](backlog/003-visual-component-system.md) | visuals | P1 | backlog | Reusable visuals keep interactive explainers from becoming one-off work |
+| [006-transparency-in-coverage-discovery.md](backlog/006-transparency-in-coverage-discovery.md) | data | P1 | backlog | Transparency in Coverage is a high-value next data domain but needs metadata-first discovery before bulk processing |
 
 ## Completed
 

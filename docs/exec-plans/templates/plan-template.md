@@ -1,7 +1,7 @@
 # [Project/Feature Name]
 
 Status: backlog | active | blocked | completed | abandoned
-Domain: site | content | visuals | labs | docs | tooling
+Domain: site | content | visuals | labs | data | docs | tooling
 Priority: P0 | P1 | P2 | P3
 Created: YYYY-MM-DD
 Last updated: YYYY-MM-DD
@@ -110,4 +110,3 @@ Follow-ups transferred:
 Residual risk:
 
 - 
-

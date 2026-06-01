@@ -12,6 +12,8 @@ The current committed architecture is a static-first Astro site plus repo-native
 - `src/content/` stores local MDX artifacts for manifesto, essays, visuals, labs, and notes.
 - `src/content.config.ts` defines the content collections.
 - `src/components/layout/` and `src/components/visuals/` hold shared presentation and visual-system pieces.
+- `data/` holds repo-local source manifests, raw/staging/clean data, rollups, and validation reports for data domains.
+- `analysis/` may hold reviewed analysis packets when a dataset has validated clean outputs.
 - `public/` holds static public assets.
 
 The site has no CMS, database, accounts, backend service, analytics, or deployment adapter.
@@ -27,8 +29,15 @@ The site has no CMS, database, accounts, backend service, analytics, or deployme
     core-beliefs.md
     content-system.md
     agent-first-operating-model.md
+    data-pipeline-system-design.md
+    data-analysis-sop.md
     decisions/
     exec-plans/
+  data/
+    _system/
+    homelessness/
+    transparency-in-coverage/
+  analysis/
   src/
     content/
       essays/
@@ -44,7 +53,7 @@ The site has no CMS, database, accounts, backend service, analytics, or deployme
   public/
 ```
 
-The first version of this tree is implemented. Keep new additions inside this shape unless a future execution plan records a stronger reason to change it.
+The site skeleton and first data-domain directories are implemented. Create target data and analysis subdirectories only when a plan needs them, and keep new additions inside this shape unless a future execution plan records a stronger reason to change it.
 
 ## Technical Defaults
 
@@ -53,7 +62,8 @@ The first version of this tree is implemented. Keep new additions inside this sh
 - Diagrams: Mermaid and hand-authored SVG where useful.
 - Interactives: small, reusable components embedded directly in essays and visuals.
 - Data: CSV and JSON first.
-- Larger analysis: local notebooks or scripts that export static artifacts into the site.
+- Data pipelines: local-first scripts that write source manifests, clean outputs, validation reports, and compact public assets.
+- Larger analysis: local notebooks or scripts that run from validated clean data and export reviewed static artifacts into the site.
 - Hosting: GitHub Pages with the custom domain `abeautifulpoint.com`.
 
 ## Boundaries
@@ -61,6 +71,7 @@ The first version of this tree is implemented. Keep new additions inside this sh
 - No CMS in the first version.
 - No user accounts in the first version.
 - No database unless a specific interactive artifact proves it needs one.
+- No cloud data warehouse or external data provider until local discovery proves that source scale, update cadence, or query needs require it.
 - No generic AI blog surface.
 - No private employer data, screenshots, names, incidents, or customer facts.
 - No opaque visual flourishes that do not improve understanding.
@@ -69,6 +80,7 @@ The first version of this tree is implemented. Keep new additions inside this sh
 
 - The repo is legible to future agents without chat history.
 - Content, visual data, and decisions are versioned in the repo.
+- Public data assets are generated from source manifests and validation reports.
 - Public artifacts should degrade gracefully without client-side JavaScript.
 - Interactive components should be small enough to inspect and validate.
 - Visuals must support the argument of a piece.
