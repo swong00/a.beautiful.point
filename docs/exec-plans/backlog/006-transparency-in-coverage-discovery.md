@@ -24,7 +24,7 @@ Read these first:
 Current state:
 
 - What already exists:
-  - `data/transparency-in-coverage/README.md` reserves the domain and points back to this plan.
+  - `../pipelines/domains/transparency-in-coverage/README.md` reserves the domain and points back to this plan.
   - The repo has an accepted local-first detachable data pipeline direction.
   - The active homelessness plan is the first proof point for the shared pipeline shape.
 - What is known to work:
@@ -87,7 +87,7 @@ The plan is complete when the repo has:
 - The same page warns that individual JSON files may be as large as one terabyte and that the table of contents is not intended to be opened on personal workstations.
 - Cigna exposes a current Federal table-of-contents pointer at `https://www.cigna.com/static/mrf/latest.json`.
 - CMS publishes Health Plan Price Transparency guidance for machine-readable files and implementation schemas through the CMS price transparency guide.
-- The repo has no TiC pipeline yet, only an empty `data/transparency-in-coverage/` directory.
+- The pipeline repo has no TiC pipeline yet, only a reserved `../pipelines/domains/transparency-in-coverage/` directory.
 
 Source references:
 
@@ -101,7 +101,7 @@ Source references:
 | Step | Status | Validation | Evidence |
 | --- | --- | --- | --- |
 | Shape the first editorial question | pending | Brief states the reader question, why it matters, and what data slice could answer it |  |
-| Build source discovery and manifest | pending | Command writes `data/transparency-in-coverage/raw/manifest.json` with Cigna and CMS source metadata |  |
+| Build source discovery and manifest | pending | Command writes `../pipelines/domains/transparency-in-coverage/data/raw/manifest.json` with Cigna and CMS source metadata |  |
 | Index Cigna table-of-contents metadata | pending | Command writes a small index summary without downloading linked MRF files |  |
 | Inspect CMS schema and choose validation target | pending | Decision recorded with schema version and rationale |  |
 | Stream or sample a narrow candidate slice | pending | Sample command records byte counts, compression handling, parse warnings, and row/object counts |  |

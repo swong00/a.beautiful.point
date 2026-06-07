@@ -15,7 +15,7 @@ The editorial promise is simple:
 - [docs/core-beliefs.md](docs/core-beliefs.md) is the north star for product, audience, voice, and taste.
 - [docs/content-system.md](docs/content-system.md) defines the site sections, artifact formats, and first content ideas.
 - [docs/agent-first-operating-model.md](docs/agent-first-operating-model.md) defines how humans and agents work in this repo.
-- [docs/data-pipeline-system-design.md](docs/data-pipeline-system-design.md) defines the local-first data-processing system for recurring public datasets.
+- [docs/data-pipeline-system-design.md](docs/data-pipeline-system-design.md) defines the local-first data-processing system for recurring public datasets, now implemented in the sibling `../pipelines` repo.
 - [docs/data-analysis-sop.md](docs/data-analysis-sop.md) defines how validated data becomes reviewed, publishable insight.
 - [docs/exec-plans/README.md](docs/exec-plans/README.md) explains the execution-plan system.
 - [docs/exec-plans/index.md](docs/exec-plans/index.md) is the current plan dashboard.
@@ -52,7 +52,7 @@ The intended first public version is small, serious, and static-first:
 - `/labs` - prototypes, notebooks, open fragments
 - `/about` - mission, principles, and work-with-me bridge
 
-Default stack direction: Astro, MDX, local CSV/JSON data, repo-local data pipelines, Mermaid/SVG diagrams, and small interactive components. Do not add a CMS, database, accounts, or backend until a specific artifact requires it.
+Default stack direction: Astro, MDX, local CSV/JSON public assets, delegated `../pipelines` data commands, Mermaid/SVG diagrams, and small interactive components. Do not add a CMS, database, accounts, or backend until a specific artifact requires it.
 
 ## Local Development
 
@@ -64,6 +64,7 @@ pnpm run dev
 Validation:
 
 ```sh
+pnpm data:doctor
 pnpm run check
 pnpm run build
 ```

@@ -9,9 +9,9 @@
     "build": "astro build",
     "check": "astro check",
     "preview": "astro preview",
-    "data:setup": "python3 -m venv .venv-data && .venv-data/bin/python -m pip install --upgrade pip && .venv-data/bin/python -m pip install -r requirements-data.txt",
-    "data:doctor": ".venv-data/bin/python scripts/data/homelessness_pipeline.py doctor",
-    "data:discover": ".venv-data/bin/python scripts/data/homelessness_pipeline.py discover"
+    "data:setup": "pnpm --dir ../pipelines data:setup",
+    "data:doctor": "pnpm --dir ../pipelines data:doctor",
+    "data:discover": "pnpm --dir ../pipelines data:discover"
   },
   "dependencies": {
     "@astrojs/mdx": "^5.0.6",

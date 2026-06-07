@@ -4,7 +4,7 @@ Status: active
 Domain: visuals
 Priority: P0
 Created: 2026-05-18
-Last updated: 2026-05-30
+Last updated: 2026-06-05
 Owner/driver: mixed
 Branch: codex/homelessness-data-scaffold
 Related: [../../homelessness-map-explorer-design.md](../../homelessness-map-explorer-design.md)
@@ -20,6 +20,8 @@ Read these first:
 5. [docs/exec-plans/README.md](../README.md)
 6. [docs/homelessness-map-explorer-design.md](../../homelessness-map-explorer-design.md)
 7. [docs/data-analysis-sop.md](../../data-analysis-sop.md)
+8. [../pipelines/README.md](../../../../pipelines/README.md)
+9. [../pipelines/domains/homelessness/README.md](../../../../pipelines/domains/homelessness/README.md)
 
 Current state:
 
@@ -29,14 +31,16 @@ Current state:
   - A prior local analysis exists outside the repo at `/Users/swong/Library/Mobile Documents/com~apple~CloudDocs/Documents/Projects.macmini/thescottandsiewproject/homeless-data-analysis`.
   - The design note captures the target UX, data model, ETL stages, official sources, caveats, and automation direction.
   - The data analysis SOP now defines the Data Analyst role and review-gated analysis packets.
+  - The data pipeline implementation has moved to the sibling `../pipelines` repo.
+  - This project keeps `pnpm data:*` commands that delegate into `../pipelines`.
 - What is known to work:
   - Current site validation commands are `pnpm run check` and `pnpm run build`.
   - HUD's FY2024 CoC geography FeatureServer supports GeoJSON.
-  - The ETL runtime is scaffolded as Python through `pnpm data:setup` and `pnpm data:doctor`.
-  - `pnpm data:discover` writes `data/homelessness/raw/manifest.json` with eight HUD AHAR resource links and one HUD CoC geography source.
+  - The ETL runtime is scaffolded as Python in `../pipelines` through delegated `pnpm data:setup` and `pnpm data:doctor`.
+  - `pnpm data:discover` writes `../pipelines/domains/homelessness/data/raw/manifest.json` with eight HUD AHAR resource links and one HUD CoC geography source.
 - What is known broken or incomplete:
-  - No official HUD source download code exists in this repo.
-  - No PIT/HIC normalization code exists in this repo.
+  - No official HUD source download code exists in the pipeline repo.
+  - No PIT/HIC normalization code exists in the pipeline repo.
   - No map UI exists.
   - No analysis register or reviewed homelessness analysis packets exist yet.
   - CoC historical boundary handling is unresolved.
@@ -56,10 +60,16 @@ Current state:
   - 2026-05-30: `pnpm install` passed and reported the lockfile/environment already up to date.
   - 2026-05-30: `pnpm data:setup` passed with pinned Python dependencies already satisfied.
   - 2026-05-30: `pnpm data:doctor` passed with Python 3.11.7 and pinned dependencies present.
-  - 2026-05-30: `pnpm data:discover` passed and wrote `data/homelessness/raw/manifest.json`; discovery used the verified 2024 fallback because local HUD USER requests returned `x-amzn-waf-action: challenge`.
+  - 2026-05-30: `pnpm data:discover` passed and wrote the then-current repo-local source manifest; discovery used the verified 2024 fallback because local HUD USER requests returned `x-amzn-waf-action: challenge`.
   - 2026-05-30: `pnpm run check` passed with 0 errors, 0 warnings, and 0 hints.
   - 2026-05-30: `pnpm run build` passed and built 11 static pages.
   - 2026-05-30: `pnpm data:download`, `pnpm data:build`, `pnpm data:validate`, and `pnpm data:publish` were not run because those package scripts are pending future plan steps and are not defined in `package.json` yet.
+  - 2026-06-05: `CI=true pnpm install` passed after `package.json` changed, refreshing local pnpm state.
+  - 2026-06-05: `pnpm data:setup` passed through the `../pipelines` delegate and installed pinned Python dependencies into `../pipelines/.venv-data`.
+  - 2026-06-05: `pnpm data:doctor` passed through the `../pipelines` delegate with Python 3.14.4 and pinned dependencies present.
+  - 2026-06-05: `pnpm data:discover` passed through the `../pipelines` delegate and wrote `../pipelines/domains/homelessness/data/raw/manifest.json`; discovery used the verified 2024 fallback because local HUD USER requests could not be parsed.
+  - 2026-06-05: `pnpm run check` passed with 0 errors, 0 warnings, and 0 hints.
+  - 2026-06-05: `pnpm run build` passed and built 11 static pages.
 - External state or access needed:
   - HUD public data files and HUD GIS FeatureServer access.
   - Network access for source discovery and download.
@@ -116,8 +126,9 @@ The plan is complete when the repo has:
 | Step | Status | Validation | Evidence |
 | --- | --- | --- | --- |
 | Capture design, SOP, and execution plan | done | Design doc, data analysis SOP, and active plan committed to repo working tree; `pnpm run check` and `pnpm run build` pass | `docs/homelessness-map-explorer-design.md`; `docs/data-analysis-sop.md`; this plan |
-| Decide pipeline runtime and dependencies | done | Decision recorded in Decision Log; package files or environment files updated | Python ETL + TypeScript frontend split recorded; `requirements-data.txt`, `package.json`, `.gitignore`, `scripts/data/homelessness_pipeline.py`, and `data/homelessness/README.md` updated |
-| Build source discovery and manifest | done | `pnpm data:discover` writes a manifest with current HUD source URLs and metadata | `data/homelessness/raw/manifest.json`; command passed on 2026-05-18 with verified 2024 fallback and HUD WAF warning recorded in manifest |
+| Decide pipeline runtime and dependencies | done | Decision recorded in Decision Log; package files or environment files updated | Python ETL + TypeScript frontend split recorded; pipeline implementation now lives in `../pipelines`; this project's `package.json` delegates `pnpm data:*` |
+| Build source discovery and manifest | done | `pnpm data:discover` writes a manifest with current HUD source URLs and metadata | `../pipelines/domains/homelessness/data/raw/manifest.json`; command passed on 2026-05-18 with verified 2024 fallback and HUD WAF warning recorded in manifest |
+| Extract data pipeline to sibling repo | done | `pnpm data:doctor` and `pnpm data:discover` still run from this project root | `package.json`; `../pipelines/package.json`; `../pipelines/domains/homelessness/scripts/homelessness_pipeline.py`; `docs/decisions/0003-extract-data-pipeline-to-swventure-pipelines.md` |
 | Build raw download stage | pending | `pnpm data:download` downloads sources, records hashes, and is idempotent |  |
 | Build PIT parser and normalizer | pending | `pnpm data:build` emits clean PIT observations for selected core metrics |  |
 | Build state-level rollups | pending | Rollups cover all available years and pass state/national sanity checks |  |
@@ -185,6 +196,7 @@ Before public deployment:
 | 2026-05-18 | Introduce a Data Analyst role and review-gated analysis packets as a separate lane from ETL. | ETL should produce trustworthy data; analysis should produce supported insight candidates for the UI. |
 | 2026-05-18 | Use Python for the data pipeline and TypeScript/Astro for the explorer frontend. | Python with pinned `pandas`, `python-calamine`, and `openpyxl` is the clearest path for HUD XLSB/XLSX parsing and validation, while `pnpm` remains the top-level command surface for agents and the static frontend. |
 | 2026-05-18 | Let source discovery fall back to a verified 2024 HUD resource list when local HUD USER requests return a WAF challenge, while recording fetch diagnostics in the manifest. | Keeps the manifest reproducible and makes the access issue explicit for the download stage. |
+| 2026-06-05 | Move the data pipeline implementation to the sibling `../pipelines` repo while keeping `pnpm data:*` delegates in this project. | Preserves active plan commands while making data processing an independently versioned shared lane. |
 
 ## Follow-Up Register
 

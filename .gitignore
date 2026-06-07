@@ -10,8 +10,6 @@ dist/
 coverage/
 __pycache__/
 *.pyc
+
+# Legacy local pipeline environment; current data commands delegate to ../pipelines.
 .venv-data/
-data/homelessness/raw/hud/
-data/homelessness/raw/census/
-data/homelessness/raw/geography/
-data/homelessness/staging/

@@ -135,7 +135,7 @@ public/
       validation-report.json
 ```
 
-The `data/homelessness/raw/` directory may stay out of the public bundle if file sizes are large. Public assets should be small enough for a static site and generated from reproducible source manifests.
+The sibling `../pipelines/domains/homelessness/data/raw/` directory may stay out of the public bundle if file sizes are large. Public assets should be small enough for a static site and generated from reproducible source manifests.
 
 ## Analysis Lane
 
@@ -276,7 +276,7 @@ Pipeline stages:
    - Record expected URLs in `source_manifest`.
 
 2. Download
-   - Download source files into `data/homelessness/raw/`.
+   - Download source files into `../pipelines/domains/homelessness/data/raw/`.
    - Write hashes, sizes, timestamps, and source URLs.
    - Do not overwrite a raw file without preserving the manifest evidence.
 

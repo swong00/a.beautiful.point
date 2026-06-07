@@ -1,7 +1,7 @@
 # Data Pipeline System Design
 
 Status: accepted direction
-Last updated: 2026-05-31
+Last updated: 2026-06-05
 Owner/driver: mixed
 
 Related:
@@ -14,12 +14,14 @@ Related:
 
 A Beautiful Point needs a repeatable way to turn public, messy, recurring data into publishable evidence and insight.
 
-The data-processing system should be separate from the public site or any future CMS surface, but it should start simple and local. The first version should live in this repo, use local files and scripts, and emit small reviewed static assets that the Astro site can publish.
+The data-processing system should be separate from the public site or any future CMS surface, but it should start simple and local. The first version began in this repo and now lives in the sibling `../pipelines` repo, using local files and scripts to emit small reviewed static assets that the Astro site can publish.
+
+As of 2026-06-05, this project keeps `pnpm data:*` commands as a compatibility surface that delegates to `../pipelines`.
 
 The intended progression is:
 
 ```text
-local repo pipeline -> detachable data repo or job -> cloud or provider only when scale proves it
+local project commands -> sibling pipeline repo -> scheduled job or cloud only when scale proves it
 ```
 
 ## Decision Summary
@@ -28,8 +30,8 @@ Use a local-first, detachable data pipeline.
 
 Near term:
 
-- Keep the pipeline in this repo.
-- Use `pnpm` as the top-level command surface for agents.
+- Keep the pipeline local in the sibling `../pipelines` repo.
+- Use this project's `pnpm data:*` commands as the compatibility surface for agents.
 - Use Python for data ingestion, parsing, normalization, validation, and static asset generation unless a dataset has a stronger reason to use another runtime.
 - Use TypeScript and Astro only for frontend loading and rendering.
 - Keep raw and staging data out of the public bundle.
@@ -52,36 +54,37 @@ Long term:
 
 ## Repository Shape
 
-Preferred shape:
+Preferred pipeline repo shape:
 
 ```text
-data/
+../pipelines/
   _system/
     pipeline-registry.json
     source-manifest-schema.json
     validation-report-schema.json
-  <domain>/
-    raw/
-    staging/
-    clean/
-    rollups/
-    reports/
-analysis/
-  <domain>/
-    <analysis-id>/
-docs/
-  analysis/
+  domains/
     <domain>/
-      analysis-register.md
-public/
-  data/
-    <domain>/
-      manifest.json
-      validation-report.json
-      insights/
-scripts/
-  data/
-    <domain>_pipeline.py
+      data/
+        raw/
+        staging/
+        clean/
+        rollups/
+        reports/
+      analysis/
+      public-contract/
+      scripts/
+        <domain>_pipeline.py
+a.beautiful.point/
+  docs/
+    analysis/
+      <domain>/
+        analysis-register.md
+  public/
+    data/
+      <domain>/
+        manifest.json
+        validation-report.json
+        insights/
 ```
 
 This is a target pattern, not a demand to create every directory before it has content.
@@ -161,10 +164,10 @@ Large files:
 Every durable dataset should eventually have:
 
 ```text
-data/<domain>/raw/manifest.json
-data/<domain>/reports/validation-report.json
-data/<domain>/reports/validation-report.md
-data/<domain>/clean/dataset-version.json
+../pipelines/domains/<domain>/data/raw/manifest.json
+../pipelines/domains/<domain>/data/reports/validation-report.json
+../pipelines/domains/<domain>/data/reports/validation-report.md
+../pipelines/domains/<domain>/data/clean/dataset-version.json
 docs/analysis/<domain>/analysis-register.md
 public/data/<domain>/manifest.json
 ```
@@ -183,6 +186,9 @@ Public assets should state:
 Default command surface:
 
 ```sh
+pnpm data:setup
+pnpm data:doctor
+pnpm data:discover
 pnpm data:<domain>:doctor
 pnpm data:<domain>:discover
 pnpm data:<domain>:download
@@ -191,7 +197,7 @@ pnpm data:<domain>:validate
 pnpm data:<domain>:publish
 ```
 
-For a single active pipeline, shorter aliases such as `pnpm data:discover` are acceptable.
+For the single active pipeline, `pnpm data:doctor` and `pnpm data:discover` in this project delegate to `../pipelines`.
 
 Default tools:
 
@@ -315,4 +321,3 @@ Risks:
 - Can hide data-quality learning behind platform machinery.
 
 Use this option only after local discovery proves a dataset cannot be handled responsibly with local indexing, streaming, sampling, and compact derived outputs.
-
