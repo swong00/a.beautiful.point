@@ -1,0 +1,134 @@
+---
+// Inspectable excerpt of the retained facts for one code, in deterministic
+// fact_key order (never sorted by amount, so ordering cannot read as ranking).
+// The full checked-in JSON asset is linked for complete inspection.
+import {
+  formatAmount,
+  loadCodeFacts,
+  loadRelease,
+} from "@lib/tic-pricing-slice";
+
+interface Props {
+  code: string;
+  excerptRows?: number;
+}
+
+const { code, excerptRows = 40 } = Astro.props;
+const facts = loadCodeFacts(code);
+const excerpt = facts.slice(0, excerptRows);
+const assetHref = `/data/transparency-in-coverage/codes/${code}.json`;
+const rowCount = loadRelease().codes[code]!.row_count;
+---
+
+<div class="rate-table">
+  <p class="table-title">
+    First {excerpt.length} of {rowCount.toLocaleString("en-US")} retained facts
+    for CPT {code}, in record-key order
+  </p>
+  <div class="scroll" tabindex="0" role="region" aria-label={`Retained fact excerpt for CPT ${code}`}>
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">record</th>
+          <th scope="col" class="num">amount</th>
+          <th scope="col">negotiated type</th>
+          <th scope="col">billing class</th>
+          <th scope="col">provider group</th>
+          <th scope="col">expires</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          excerpt.map((fact) => (
+            <tr>
+              <td class="key">{fact.fact_key.replace("sha256:", "").slice(0, 10)}…</td>
+              <td class="num">${formatAmount(fact.amount)}</td>
+              <td>{fact.negotiated_type}</td>
+              <td>{fact.billing_class}</td>
+              <td>{fact.provider_group_id.replace("provider-group-", "")}</td>
+              <td>{fact.expiration_date}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+  <p class="table-footer">
+    Inspect all {rowCount.toLocaleString("en-US")} facts in the checked-in
+    asset: <a href={assetHref}>codes/{code}.json</a> · verified against
+    <a href="/data/transparency-in-coverage/release.json">release.json</a>
+  </p>
+</div>
+
+<style>
+  .rate-table {
+    margin: 1.5rem 0;
+  }
+
+  .table-title {
+    margin: 0 0 0.6rem;
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    font-weight: 500;
+  }
+
+  .scroll {
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+  }
+
+  table {
+    width: 100%;
+    min-width: 560px;
+    border-collapse: collapse;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+  }
+
+  th,
+  td {
+    padding: 0.4rem 0.7rem;
+    border-bottom: 1px solid var(--line);
+    color: var(--muted);
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  thead th {
+    position: sticky;
+    top: 0;
+    background: var(--surface);
+    color: var(--teal-deep);
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  td.key {
+    color: var(--ink);
+  }
+
+  .num {
+    text-align: right;
+  }
+
+  td.num {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .table-footer {
+    margin: 0.6rem 0 0;
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+
+  .table-footer a {
+    color: var(--teal-deep);
+  }
+</style>

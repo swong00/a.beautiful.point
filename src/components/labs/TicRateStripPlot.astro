@@ -1,0 +1,180 @@
+---
+// Build-time SVG strip plot: one dot = one retained published fact, faceted by
+// billing class and negotiated type so different kinds of statements are never
+// silently mixed. No client JavaScript; jitter is deterministic per record.
+import {
+  formatAmount,
+  loadCodeFacts,
+  type TicFact,
+} from "@lib/tic-pricing-slice";
+
+interface Props {
+  code: string;
+}
+
+const { code } = Astro.props;
+const facts = loadCodeFacts(code);
+
+const facetOrder = [
+  ["professional", "fee schedule"],
+  ["professional", "negotiated"],
+  ["institutional", "fee schedule"],
+  ["institutional", "negotiated"],
+] as const;
+
+const facets = facetOrder
+  .map(([billingClass, negotiatedType]) => ({
+    billingClass,
+    negotiatedType,
+    facts: facts.filter(
+      (fact) =>
+        fact.billing_class === billingClass &&
+        fact.negotiated_type === negotiatedType,
+    ),
+  }))
+  .filter((facet) => facet.facts.length > 0);
+
+const maxAmount = Math.max(...facts.map((fact) => fact.amount));
+
+// Nice axis: pick a step of 1/2/2.5/5 × 10^n giving four to six ticks from $0.
+function niceStep(rawStep: number): number {
+  const magnitude = 10 ** Math.floor(Math.log10(rawStep));
+  for (const multiple of [1, 2, 2.5, 5, 10]) {
+    if (magnitude * multiple >= rawStep) return magnitude * multiple;
+  }
+  return magnitude * 10;
+}
+const step = niceStep(maxAmount / 5);
+const axisMax = Math.ceil(maxAmount / step) * step;
+const ticks = Array.from({ length: Math.round(axisMax / step) + 1 }, (_, i) => i * step);
+
+const plotLeft = 12;
+const plotRight = 688;
+const bandHeight = 46;
+const bandGap = 30;
+const axisHeight = 34;
+const plotWidth = plotRight - plotLeft;
+const height = facets.length * (bandHeight + bandGap) + axisHeight;
+
+const xFor = (amount: number) => plotLeft + (amount / axisMax) * plotWidth;
+
+// Deterministic per-record jitter inside the band (no randomness, no meaning).
+function jitterFor(fact: TicFact): number {
+  let hash = 0;
+  for (const char of fact.fact_key) {
+    hash = (hash * 31 + char.charCodeAt(0)) % 1_000_003;
+  }
+  return hash / 1_000_003;
+}
+
+const facetTops = facets.map((_, index) => index * (bandHeight + bandGap) + bandGap);
+const axisY = facets.length * (bandHeight + bandGap) + 8;
+---
+
+<figure class="strip-plot">
+  <figcaption>
+    Every retained published amount for CPT {code} — one dot is one retained
+    source fact (never one provider), faceted by billing class and negotiated
+    type. Dot height within a band is random jitter with no meaning.
+  </figcaption>
+  <svg
+    viewBox={`0 0 700 ${height}`}
+    role="img"
+    aria-label={`Strip plot of the ${facts.length.toLocaleString("en-US")} retained published amounts for CPT ${code}, one dot per retained fact, faceted by billing class and negotiated type. Amounts span $0 to $${formatAmount(axisMax)}.`}
+  >
+    {
+      facets.map((facet, index) => (
+        <g>
+          <text class="facet-label" x={plotLeft} y={facetTops[index]! - 8}>
+            {facet.billingClass} · {facet.negotiatedType} —{" "}
+            {facet.facts.length.toLocaleString("en-US")} retained facts
+          </text>
+          <line
+            class="band-line"
+            x1={plotLeft}
+            x2={plotRight}
+            y1={facetTops[index]! + bandHeight}
+            y2={facetTops[index]! + bandHeight}
+          />
+          {facet.facts.map((fact) => (
+            <circle
+              class="dot"
+              cx={xFor(fact.amount).toFixed(1)}
+              cy={(facetTops[index]! + 6 + jitterFor(fact) * (bandHeight - 12)).toFixed(1)}
+              r="2.4"
+            />
+          ))}
+        </g>
+      ))
+    }
+    <g>
+      {
+        ticks.map((tick) => (
+          <g>
+            <line
+              class="tick-line"
+              x1={xFor(tick)}
+              x2={xFor(tick)}
+              y1={axisY - 4}
+              y2={axisY}
+            />
+            <text
+              class="tick-label"
+              x={xFor(tick)}
+              y={axisY + 14}
+              text-anchor={tick === 0 ? "start" : tick === axisMax ? "end" : "middle"}
+            >
+              ${formatAmount(tick).replace(".00", "")}
+            </text>
+          </g>
+        ))
+      }
+    </g>
+  </svg>
+</figure>
+
+<style>
+  .strip-plot {
+    margin: 1.5rem 0;
+    padding: 1.2rem;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    background: var(--surface);
+  }
+
+  figcaption {
+    margin-bottom: 1rem;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .facet-label {
+    fill: var(--teal-deep);
+    font-family: var(--mono);
+    font-size: 11px;
+    text-transform: uppercase;
+  }
+
+  .band-line,
+  .tick-line {
+    stroke: var(--line);
+    stroke-width: 1;
+  }
+
+  .dot {
+    fill: var(--teal);
+    fill-opacity: 0.3;
+  }
+
+  .tick-label {
+    fill: var(--muted);
+    font-family: var(--mono);
+    font-size: 11px;
+  }
+</style>

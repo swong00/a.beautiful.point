@@ -1,0 +1,37 @@
+---
+title: "Anatomy of a Published Healthcare Rate"
+description: "What one Transparency in Coverage file actually published for a billing code — and everything you would need to know before reading it as a price."
+section: "labs"
+date: 2026-08-30
+status: "draft"
+order: 2
+tags:
+  - healthcare
+  - transparency-in-coverage
+  - data
+beautifulPoint: "A published rate is a fact about a file, not a price — the missing context is the content."
+---
+
+import TicRateLab from "@components/labs/TicRateLab.astro";
+
+Since 2022, US health insurers have been required to publish machine-readable
+files listing the rates they have negotiated. The files exist, they are
+enormous, and they are routinely read as price lists. They are not price
+lists. Each line is a narrow, specific statement: *this file, for this
+reporting month, attached this number to this billing code in this context.*
+
+This lab dissects real records from that system: a bounded slice of
+**12,183 retained monetary negotiated-rate facts** from eight Cigna Colorado
+in-network files for reporting month July 2026, filtered to fifteen exact CPT
+codes. The default view is CPT 99204, a common new-patient office visit, with
+1,994 retained facts. Every value on this page comes from checked-in assets
+pinned to a validated pipeline release — nothing is fetched, estimated, or
+aggregated.
+
+The interesting part of a published rate is not the number. It is how much
+surrounding context the file format leaves out: no billing-code modifiers, no
+care setting, no plan attribution, not even a stated currency. Below, one real
+record is annotated field by field — what each field establishes, and what it
+quietly does not.
+
+<TicRateLab code="99204" />

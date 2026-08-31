@@ -1,0 +1,85 @@
+---
+// Claims-boundary caveats for the TiC pricing-slice lab. Rendered beside every
+// visual; wording is governed by docs/analysis/007-tic-anatomy-lab-claims-brief.md.
+import { loadRelease } from "@lib/tic-pricing-slice";
+
+const release = loadRelease();
+const meta = release.source_metadata;
+---
+
+<aside class="caveats" aria-label="What this data cannot tell you">
+  <p class="caveats-title">Before you read any number here as a price</p>
+  <ul>
+    <li>
+      <strong>These are July 2026 file contents, not current prices.</strong>
+      Every fact is what specific {meta.payer} Colorado machine-readable files
+      published for reporting month {meta.reporting_month}. Files carry no
+      currentness claim.
+    </li>
+    <li>
+      <strong>This is a bounded retained sample.</strong>
+      {release.totals.row_count.toLocaleString("en-US")} retained facts across
+      fifteen CPT codes — not a market, not all of the payer's rates, and not a
+      completeness claim.
+    </li>
+    <li>
+      <strong>USD is an assumption, not a source field.</strong> The source
+      schema does not state a currency; the contract records the USD assumption
+      explicitly.
+    </li>
+    <li>
+      <strong>Context is missing by design of the source.</strong> The slice
+      omits billing-code modifiers and care setting, and plan attribution was
+      not observed. Matching CPT codes alone do not establish comparable
+      services.
+    </li>
+    <li>
+      <strong>One dot or row is one retained published fact — never one
+      provider.</strong> Provider group ids are release-scoped opaque source
+      contexts, not identities.
+    </li>
+    <li>
+      <strong>Not advice.</strong> Nothing on this page is consumer medical or
+      purchasing advice.
+    </li>
+  </ul>
+</aside>
+
+<style>
+  .caveats {
+    margin: 1.5rem 0;
+    padding: 1rem 1.2rem;
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--amber);
+    border-radius: 4px;
+    background: var(--surface);
+  }
+
+  .caveats-title {
+    margin: 0 0 0.6rem;
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
+  .caveats ul {
+    margin: 0;
+    padding-left: 1.1rem;
+  }
+
+  .caveats li {
+    margin-bottom: 0.45rem;
+    font-size: 0.95rem;
+  }
+
+  .caveats li:last-child {
+    margin-bottom: 0;
+  }
+
+  .caveats strong {
+    color: var(--ink);
+    font-weight: 680;
+  }
+</style>

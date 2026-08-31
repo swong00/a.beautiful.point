@@ -1,0 +1,89 @@
+---
+// Code selector as plain links to statically generated per-code routes — the
+// no-JavaScript fallback IS the selector; nothing here requires script.
+import { contractCodes, LAB_BASE_PATH, loadRelease } from "@lib/tic-pricing-slice";
+
+interface Props {
+  currentCode: string;
+}
+
+const { currentCode } = Astro.props;
+const release = loadRelease();
+const codes = contractCodes();
+---
+
+<nav class="code-selector" aria-label="Choose a CPT code">
+  <p class="selector-title">Fifteen codes in this slice — retained fact counts, not completeness</p>
+  <ul>
+    {
+      codes.map((code) => (
+        <li>
+          <a
+            href={`${LAB_BASE_PATH}/${code}/`}
+            aria-current={code === currentCode ? "page" : undefined}
+          >
+            <span class="code">CPT {code}</span>
+            <span class="count">
+              {release.codes[code]!.row_count.toLocaleString("en-US")} facts
+            </span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<style>
+  .code-selector {
+    margin: 1.5rem 0;
+  }
+
+  .selector-title {
+    margin: 0 0 0.6rem;
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    font-weight: 500;
+  }
+
+  ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  a {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    padding: 0.5rem 0.65rem;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    background: var(--surface);
+    font-family: var(--mono);
+    text-decoration: none;
+  }
+
+  a:hover {
+    border-color: var(--teal);
+  }
+
+  a[aria-current="page"] {
+    border-color: var(--teal-deep);
+    box-shadow: inset 0 0 0 1px var(--teal-deep);
+  }
+
+  .code {
+    color: var(--ink);
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+
+  .count {
+    color: var(--muted);
+    font-size: 0.75rem;
+  }
+</style>
