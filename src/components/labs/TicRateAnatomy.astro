@@ -1,0 +1,195 @@
+---
+// One annotated retained record: the raw published fields on the left, what
+// each one does and does not establish on the right. Values come untransformed
+// from the checked-in verified assets (display formatting only).
+import {
+  formatAmount,
+  loadCodeFacts,
+  loadRelease,
+  type TicFact,
+} from "@lib/tic-pricing-slice";
+
+interface Props {
+  code: string;
+}
+
+const { code } = Astro.props;
+const release = loadRelease();
+const meta = release.source_metadata;
+// First fact in deterministic fact_key order — a stable, non-ranked pick.
+const fact: TicFact = loadCodeFacts(code)[0]!;
+const sourceFileCount = meta.source_files.length;
+const factSourceNote = `${meta.payer} · ${meta.geography} · reporting month ${meta.reporting_month}`;
+
+// service_codes needs its published semantics preserved: "CSTM-00" is a
+// payer-custom sentinel CMS documents as covering all service codes, and an
+// empty array means the fact was published without a service-code list —
+// neither is a count of settings.
+let serviceCodesValue: string;
+let serviceCodesNote: string;
+if (fact.service_codes.length === 0) {
+  serviceCodesValue = "— (none published)";
+  serviceCodesNote =
+    "This fact was published without a place-of-service list; the slice records that absence, not a setting.";
+} else if (fact.service_codes.includes("CSTM-00")) {
+  serviceCodesValue = fact.service_codes.join(", ");
+  serviceCodesNote =
+    "“CSTM-00” is a payer-custom sentinel published in place of an explicit list — CMS's schema guidance describes it as covering all service codes, not one setting.";
+} else {
+  const count = fact.service_codes.length;
+  serviceCodesValue = `${count} CMS place-of-service code${count === 1 ? "" : "s"}`;
+  serviceCodesNote =
+    "Broad CMS place-of-service context — not a specific care setting.";
+}
+
+const rows: { label: string; value: string; note: string; kind?: string }[] = [
+  {
+    label: "amount",
+    value: `$${formatAmount(fact.amount)}`,
+    kind: "amount",
+    note: "The published number. USD is a contract assumption — the source schema does not state a currency.",
+  },
+  {
+    label: "billing_code",
+    value: `${meta.billing_code_type} ${code} (${meta.billing_code_type_version})`,
+    note: "The procedure code the file attached to this fact. The slice omits modifiers, so the code alone does not fully specify the service.",
+  },
+  {
+    label: "service_name",
+    value: fact.service_name,
+    note: "The service name exactly as the file published it.",
+  },
+  {
+    label: "negotiated_type",
+    value: fact.negotiated_type,
+    note: "What the payer calls this number. “Fee schedule” and “negotiated” facts are different kinds of statements and are never mixed silently here.",
+  },
+  {
+    label: "billing_class",
+    value: fact.billing_class,
+    note: "Professional and institutional facts describe different billing contexts.",
+  },
+  {
+    label: "service_codes",
+    value: serviceCodesValue,
+    note: serviceCodesNote,
+  },
+  {
+    label: "provider_group_id",
+    value: fact.provider_group_id,
+    note: "A release-scoped opaque source context. It is not a provider identity, and it cannot be counted as one.",
+  },
+  {
+    label: "expiration_date",
+    value: fact.expiration_date,
+    note: "Expiration lineage as published; 9999-12-31 is the source's open-ended sentinel.",
+  },
+  {
+    label: "source lineage",
+    value: factSourceNote,
+    note: `Published in one of ${sourceFileCount} in-network files for this boundary; plan attribution was not observed in this slice.`,
+  },
+];
+---
+
+<figure class="anatomy">
+  <figcaption>
+    One retained record for {meta.billing_code_type} {code}, shown exactly as
+    published, with what each field does — and does not — establish.
+  </figcaption>
+  <dl>
+    {
+      rows.map((row) => (
+        <div class="field">
+          <dt>{row.label}</dt>
+          <dd class:list={["value", row.kind]}>{row.value}</dd>
+          <dd class="note">{row.note}</dd>
+        </div>
+      ))
+    }
+  </dl>
+  <p class="record-id">
+    record <code>{fact.fact_key}</code>
+  </p>
+</figure>
+
+<style>
+  .anatomy {
+    margin: 1.5rem 0;
+    padding: 1.2rem 1.2rem 0.9rem;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    background: var(--surface);
+  }
+
+  figcaption {
+    margin-bottom: 1rem;
+    color: var(--ink);
+    font-size: 1.02rem;
+    font-weight: 680;
+  }
+
+  dl {
+    margin: 0;
+  }
+
+  .field {
+    display: grid;
+    grid-template-columns: 10.5rem 1fr;
+    gap: 0.15rem 1rem;
+    padding: 0.55rem 0;
+    border-top: 1px solid var(--line);
+  }
+
+  dt {
+    grid-row: span 2;
+    color: var(--teal-deep);
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    font-weight: 500;
+    overflow-wrap: anywhere;
+  }
+
+  dd {
+    margin: 0;
+  }
+
+  .value {
+    color: var(--ink);
+    font-family: var(--mono);
+    font-size: 0.92rem;
+    overflow-wrap: anywhere;
+  }
+
+  .value.amount {
+    color: var(--teal-deep);
+    font-size: 1.35rem;
+    font-weight: 680;
+  }
+
+  .note {
+    color: var(--muted);
+    font-size: 0.88rem;
+  }
+
+  .record-id {
+    margin: 0.9rem 0 0;
+    color: var(--muted);
+    font-size: 0.78rem;
+  }
+
+  .record-id code {
+    font-family: var(--mono);
+    overflow-wrap: anywhere;
+  }
+
+  @media (max-width: 560px) {
+    .field {
+      grid-template-columns: 1fr;
+    }
+
+    dt {
+      grid-row: auto;
+    }
+  }
+</style>

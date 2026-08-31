@@ -1,0 +1,51 @@
+---
+// Statically generated per-code routes — the no-JavaScript fallback for the
+// code selector. Each route renders entirely from the checked-in assets.
+import BaseLayout from "@components/layout/BaseLayout.astro";
+import TicRateLab from "@components/labs/TicRateLab.astro";
+import {
+  contractCodes,
+  LAB_BASE_PATH,
+  loadRelease,
+} from "@lib/tic-pricing-slice";
+
+export function getStaticPaths() {
+  return contractCodes().map((code) => ({ params: { code } }));
+}
+
+const { code } = Astro.params;
+const release = loadRelease();
+const rowCount = release.codes[code]!.row_count;
+const title = `CPT ${code} — Anatomy of a Published Healthcare Rate`;
+const description = `The ${rowCount.toLocaleString("en-US")} retained Cigna Colorado July 2026 negotiated-rate facts published for CPT ${code}, annotated field by field.`;
+---
+
+<BaseLayout title={title} description={description} currentPath="/labs">
+  <article class="section">
+    <div class="prose">
+      <p class="meta-line">
+        <span>labs</span>
+        <span>CPT {code}</span>
+        <span>{rowCount.toLocaleString("en-US")} retained facts</span>
+      </p>
+      <h1 class="code-heading">CPT {code}, as published</h1>
+      <p class="lede">
+        The retained monetary negotiated-rate facts that specific Cigna
+        Colorado July 2026 files published for CPT {code} — one annotated
+        record, then all of them. Part of
+        <a href={LAB_BASE_PATH}>Anatomy of a Published Healthcare Rate</a>.
+      </p>
+      <TicRateLab code={code} />
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .code-heading {
+    font-size: 3.1rem;
+  }
+
+  .lede a {
+    color: var(--teal-deep);
+  }
+</style>

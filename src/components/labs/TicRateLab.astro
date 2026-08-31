@@ -1,0 +1,48 @@
+---
+// Full lab body for one CPT code: annotated record, caveats, strip plot,
+// table excerpt, code selector, and the release pin. Built entirely from the
+// checked-in verified assets; renders completely without client JavaScript.
+import TicCaveatBlock from "@components/labs/TicCaveatBlock.astro";
+import TicCodeSelector from "@components/labs/TicCodeSelector.astro";
+import TicRateAnatomy from "@components/labs/TicRateAnatomy.astro";
+import TicRateStripPlot from "@components/labs/TicRateStripPlot.astro";
+import TicRateTable from "@components/labs/TicRateTable.astro";
+import { loadRelease } from "@lib/tic-pricing-slice";
+
+interface Props {
+  code: string;
+}
+
+const { code } = Astro.props;
+const release = loadRelease();
+---
+
+<TicRateAnatomy code={code} />
+<TicCaveatBlock />
+<TicRateStripPlot code={code} />
+<TicRateTable code={code} />
+<TicCodeSelector currentCode={code} />
+<p class="release-pin">
+  Data: Transparency in Coverage pricing slice v0, pipeline release
+  <code>{release.release_commit.slice(0, 12)}</code>, imported with verified
+  SHA-256 content hashes recorded in
+  <a href="/data/transparency-in-coverage/release.json">release.json</a>.
+</p>
+
+<style>
+  .release-pin {
+    margin: 2rem 0 0;
+    padding-top: 0.8rem;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 0.82rem;
+  }
+
+  .release-pin code {
+    font-family: var(--mono);
+  }
+
+  .release-pin a {
+    color: var(--teal-deep);
+  }
+</style>
