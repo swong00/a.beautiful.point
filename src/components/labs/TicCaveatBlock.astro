@@ -28,10 +28,11 @@ const meta = release.source_metadata;
       explicitly.
     </li>
     <li>
-      <strong>Context is missing by design of the source.</strong> The slice
-      omits billing-code modifiers and care setting, and plan attribution was
-      not observed. Matching CPT codes alone do not establish comparable
-      services.
+      <strong>Context is missing from this bounded slice.</strong> The CMS file
+      format can carry billing-code modifiers, setting, and plan context, and
+      the underlying files publish some of it — but this slice omits modifiers
+      and setting, and plan attribution was not observed in it. Matching CPT
+      codes alone do not establish comparable services.
     </li>
     <li>
       <strong>One dot or row is one retained published fact — never one

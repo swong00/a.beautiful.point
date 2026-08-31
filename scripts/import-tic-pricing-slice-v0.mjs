@@ -32,6 +32,49 @@ const PROJECTED_FACT_FIELDS = [
   "service_name",
 ];
 
+// Trusted release descriptors, independent of any manifest the package ships.
+// Source values were computed from the pipelines repository itself
+// (`git show <release>:<path> | shasum -a 256`); per-code values were pinned
+// after the 2026-08-30 independent full reconciliation of every fact against
+// the release slice (exporter output is byte-deterministic for a release).
+// A manifest that disagrees with its release's descriptor is refused outright.
+const RELEASE_PINS = {
+  b69ad4fd10fb128af66ffe48768c8a7f115b4d16: {
+    sources: {
+      slice: {
+        sha256: "8e03a7773aa59af713b39119d15f30dfe7aa3125b27a8e0479ed6c36f1199683",
+        byte_size: 14177310,
+      },
+      header: {
+        sha256: "dd12bf1d2619ede1bec98283eac2c6aba35a67556d76375fa0a6e1d1fdeef851",
+        byte_size: 382,
+      },
+      validation_report: {
+        sha256: "cf20af7be0a4de90cb7ef8d5b5f669a35432b0e7af63e40699532995bee1cfbd",
+        byte_size: 1720,
+      },
+    },
+    total_row_count: 12183,
+    codes: {
+      "45378": { sha256: "5d9548cce80711cc9068d76127a6c83d54973c3687347001df68780868d5a9f9", byte_size: 161279, row_count: 371 },
+      "70450": { sha256: "9eb260eadba3c367ea677e7bc9760a8d26ca823d687190dbddaf3ac8a8accb0f", byte_size: 188111, row_count: 530 },
+      "70553": { sha256: "bce03cd81776bea27907be3d796119a3734a60923b0dd324f54db6a5ce447eca", byte_size: 195392, row_count: 535 },
+      "72148": { sha256: "8eabadf8a741c7061eec358a823041f6795cf809c9a82fc49b91f25877fe330d", byte_size: 217854, row_count: 602 },
+      "74177": { sha256: "993f194a298c1609764217ac4eb721724ff1b31949beb502ee298a4fc7339b11", byte_size: 258335, row_count: 707 },
+      "77067": { sha256: "3bb1b87304e0addf1be39cc6b65776529196786d37f4138cedac9563b81a9108", byte_size: 428875, row_count: 1191 },
+      "80048": { sha256: "502ed2fa9c3091c7a111de79d02ad3d5c5da9b480545e42bd60963ffc2a1de62", byte_size: 111976, row_count: 307 },
+      "80053": { sha256: "65ca8fce540d18c10b9fc57a940228aaba20ce312d8a4c5ac1bc15b73b998f2e", byte_size: 156037, row_count: 434 },
+      "80061": { sha256: "35814ad77c76adde83f074859d179e71d4ee45ce8be9564cc11cb997ce2c597b", byte_size: 167446, row_count: 504 },
+      "81003": { sha256: "b8d3e9a24f4a5b02a50a782a0c7983661af3dcf55637eba49ead25ddac6982cf", byte_size: 176379, row_count: 490 },
+      "84443": { sha256: "939e60d470256395a1f53f450bc15c3bc49440e01df4d2565462202f78c5e16b", byte_size: 125212, row_count: 346 },
+      "85025": { sha256: "b56d721e005a3ddbfe0b039746119efef06a5703f87ad5ae22f0544306d7af32", byte_size: 160817, row_count: 440 },
+      "99203": { sha256: "3cb32d5828be9b36a33e9a1ef120f06a3e435bda59eae3f2d589cb04adcdee13", byte_size: 913059, row_count: 1991 },
+      "99204": { sha256: "421c54f4b6cef42d01d6021f19bf69a73d5b21e99900e9dfa895bc90cd6e8c51", byte_size: 874117, row_count: 1994 },
+      "99205": { sha256: "57cc3f9f38ab8184b39bea83e4afa74532f01c98afbca2d506efbc4b922e7894", byte_size: 713230, row_count: 1741 },
+    },
+  },
+};
+
 const siteRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const targetDir = path.join(siteRoot, "public", "data", "transparency-in-coverage");
 
@@ -84,13 +127,25 @@ check(
   manifest.release_commit === expectedRelease,
   `Manifest release_commit ${manifest.release_commit} does not equal the expected release ${expectedRelease}; the reusable v0 label alone is not a pin.`,
 );
+const pins = RELEASE_PINS[expectedRelease];
+if (!pins) {
+  console.error(
+    `blocking: no trusted release descriptor for ${expectedRelease}; add its independently computed pins to RELEASE_PINS before importing.`,
+  );
+  process.exit(1);
+}
 for (const source of ["slice", "header", "validation_report"]) {
   const declared = manifest.sources?.[source];
+  const pinned = pins.sources[source];
   check(
-    /^[0-9a-f]{64}$/.test(declared?.sha256 ?? "") && Number.isInteger(declared?.byte_size),
-    `Manifest is missing the pinned ${source} content hash.`,
+    declared?.sha256 === pinned.sha256 && declared?.byte_size === pinned.byte_size,
+    `Manifest ${source} hash/size do not match the trusted release descriptor (declared ${declared?.sha256}/${declared?.byte_size}, pinned ${pinned.sha256}/${pinned.byte_size}).`,
   );
 }
+check(
+  manifest.totals?.row_count === pins.total_row_count,
+  `Manifest total row count ${manifest.totals?.row_count} does not match the trusted release descriptor's ${pins.total_row_count}.`,
+);
 check(
   Array.isArray(manifest.source_metadata?.source_files) &&
     manifest.source_metadata.source_files.length > 0,
@@ -116,14 +171,21 @@ for (const code of declaredCodes) {
     blockers.push(`Missing declared file: ${declared.path}`);
     continue;
   }
+  const pin = pins.codes[code];
+  check(
+    declared.sha256 === pin.sha256 &&
+      declared.byte_size === pin.byte_size &&
+      declared.row_count === pin.row_count,
+    `Code ${code} manifest declaration does not match the trusted release descriptor.`,
+  );
   const payload = fs.readFileSync(filePath);
   check(
-    payload.length === declared.byte_size,
-    `Code ${code} byte size ${payload.length} does not match declared ${declared.byte_size}.`,
+    payload.length === pin.byte_size,
+    `Code ${code} byte size ${payload.length} does not match the pinned ${pin.byte_size}.`,
   );
   check(
-    sha256(payload) === declared.sha256,
-    `Code ${code} SHA-256 does not match its declared manifest hash.`,
+    sha256(payload) === pin.sha256,
+    `Code ${code} SHA-256 does not match its pinned release hash.`,
   );
   let facts;
   try {

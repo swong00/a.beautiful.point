@@ -1,7 +1,10 @@
 ---
-// Build-time SVG strip plot: one dot = one retained published fact, faceted by
+// Build-time strip plot: one dot = one retained published fact, faceted by
 // billing class and negotiated type so different kinds of statements are never
 // silently mixed. No client JavaScript; jitter is deterministic per record.
+// Facet and axis labels are HTML text (not scaled SVG text) so they stay
+// readable at mobile widths; the dot bands are decorative SVG with the same
+// information carried by the labels and the table.
 import {
   formatAmount,
   loadCodeFacts,
@@ -51,12 +54,10 @@ const ticks = Array.from({ length: Math.round(axisMax / step) + 1 }, (_, i) => i
 const plotLeft = 12;
 const plotRight = 688;
 const bandHeight = 46;
-const bandGap = 30;
-const axisHeight = 34;
 const plotWidth = plotRight - plotLeft;
-const height = facets.length * (bandHeight + bandGap) + axisHeight;
 
 const xFor = (amount: number) => plotLeft + (amount / axisMax) * plotWidth;
+const percentFor = (amount: number) => ((xFor(amount) / 700) * 100).toFixed(3);
 
 // Deterministic per-record jitter inside the band (no randomness, no meaning).
 function jitterFor(fact: TicFact): number {
@@ -66,71 +67,58 @@ function jitterFor(fact: TicFact): number {
   }
   return hash / 1_000_003;
 }
-
-const facetTops = facets.map((_, index) => index * (bandHeight + bandGap) + bandGap);
-const axisY = facets.length * (bandHeight + bandGap) + 8;
 ---
 
 <figure class="strip-plot">
   <figcaption>
     Every retained published amount for CPT {code} — one dot is one retained
     source fact (never one provider), faceted by billing class and negotiated
-    type. Dot height within a band is random jitter with no meaning.
+    type. Dot height within a band is random jitter with no meaning, and the
+    $0–${formatAmount(axisMax).replace(".00", "")} scale below is the axis
+    range, not observed amounts.
   </figcaption>
-  <svg
-    viewBox={`0 0 700 ${height}`}
-    role="img"
-    aria-label={`Strip plot of the ${facts.length.toLocaleString("en-US")} retained published amounts for CPT ${code}, one dot per retained fact, faceted by billing class and negotiated type. Amounts span $0 to $${formatAmount(axisMax)}.`}
-  >
-    {
-      facets.map((facet, index) => (
-        <g>
-          <text class="facet-label" x={plotLeft} y={facetTops[index]! - 8}>
-            {facet.billingClass} · {facet.negotiatedType} —{" "}
-            {facet.facts.length.toLocaleString("en-US")} retained facts
-          </text>
+  {
+    facets.map((facet) => (
+      <div class="facet">
+        <p class="facet-label">
+          {facet.billingClass} · {facet.negotiatedType} —{" "}
+          {facet.facts.length.toLocaleString("en-US")} retained facts
+        </p>
+        <svg viewBox={`0 0 700 ${bandHeight}`} aria-hidden="true">
           <line
             class="band-line"
             x1={plotLeft}
             x2={plotRight}
-            y1={facetTops[index]! + bandHeight}
-            y2={facetTops[index]! + bandHeight}
+            y1={bandHeight - 1}
+            y2={bandHeight - 1}
           />
           {facet.facts.map((fact) => (
             <circle
               class="dot"
               cx={xFor(fact.amount).toFixed(1)}
-              cy={(facetTops[index]! + 6 + jitterFor(fact) * (bandHeight - 12)).toFixed(1)}
+              cy={(5 + jitterFor(fact) * (bandHeight - 12)).toFixed(1)}
               r="2.4"
             />
           ))}
-        </g>
+        </svg>
+      </div>
+    ))
+  }
+  <div class="axis" aria-hidden="true">
+    {
+      ticks.map((tick) => (
+        <span
+          class:list={[
+            "tick",
+            tick === 0 ? "first" : tick === axisMax ? "last" : undefined,
+          ]}
+          style={`left: ${percentFor(tick)}%`}
+        >
+          ${formatAmount(tick).replace(".00", "")}
+        </span>
       ))
     }
-    <g>
-      {
-        ticks.map((tick) => (
-          <g>
-            <line
-              class="tick-line"
-              x1={xFor(tick)}
-              x2={xFor(tick)}
-              y1={axisY - 4}
-              y2={axisY}
-            />
-            <text
-              class="tick-label"
-              x={xFor(tick)}
-              y={axisY + 14}
-              text-anchor={tick === 0 ? "start" : tick === axisMax ? "end" : "middle"}
-            >
-              ${formatAmount(tick).replace(".00", "")}
-            </text>
-          </g>
-        ))
-      }
-    </g>
-  </svg>
+  </div>
 </figure>
 
 <style>
@@ -148,21 +136,26 @@ const axisY = facets.length * (bandHeight + bandGap) + 8;
     font-size: 0.9rem;
   }
 
+  .facet {
+    margin-bottom: 0.9rem;
+  }
+
+  .facet-label {
+    margin: 0 0 0.25rem;
+    color: var(--teal-deep);
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
   svg {
     display: block;
     width: 100%;
     height: auto;
   }
 
-  .facet-label {
-    fill: var(--teal-deep);
-    font-family: var(--mono);
-    font-size: 11px;
-    text-transform: uppercase;
-  }
-
-  .band-line,
-  .tick-line {
+  .band-line {
     stroke: var(--line);
     stroke-width: 1;
   }
@@ -172,9 +165,27 @@ const axisY = facets.length * (bandHeight + bandGap) + 8;
     fill-opacity: 0.3;
   }
 
-  .tick-label {
-    fill: var(--muted);
+  .axis {
+    position: relative;
+    height: 1.4rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .tick {
+    position: absolute;
+    top: 0.2rem;
+    color: var(--muted);
     font-family: var(--mono);
-    font-size: 11px;
+    font-size: 0.72rem;
+    transform: translateX(-50%);
+    white-space: nowrap;
+  }
+
+  .tick.first {
+    transform: none;
+  }
+
+  .tick.last {
+    transform: translateX(-100%);
   }
 </style>

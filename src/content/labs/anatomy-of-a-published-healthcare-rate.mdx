@@ -29,9 +29,12 @@ pinned to a validated pipeline release — nothing is fetched, estimated, or
 aggregated.
 
 The interesting part of a published rate is not the number. It is how much
-surrounding context the file format leaves out: no billing-code modifiers, no
-care setting, no plan attribution, not even a stated currency. Below, one real
-record is annotated field by field — what each field establishes, and what it
-quietly does not.
+surrounding context is missing by the time the number reaches you. The source
+schema itself does not state a currency. And this bounded slice retains none
+of the billing-code-modifier, care-setting, or plan context — context the CMS
+file format can carry, and which the underlying files do publish in part —
+so a matching CPT code alone tells you less than it appears to. Below, one
+real record is annotated field by field — what each field establishes, and
+what it quietly does not.
 
 <TicRateLab code="99204" />

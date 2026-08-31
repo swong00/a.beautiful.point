@@ -21,6 +21,27 @@ const fact: TicFact = loadCodeFacts(code)[0]!;
 const sourceFileCount = meta.source_files.length;
 const factSourceNote = `${meta.payer} · ${meta.geography} · reporting month ${meta.reporting_month}`;
 
+// service_codes needs its published semantics preserved: "CSTM-00" is a
+// payer-custom sentinel CMS documents as covering all service codes, and an
+// empty array means the fact was published without a service-code list —
+// neither is a count of settings.
+let serviceCodesValue: string;
+let serviceCodesNote: string;
+if (fact.service_codes.length === 0) {
+  serviceCodesValue = "— (none published)";
+  serviceCodesNote =
+    "This fact was published without a place-of-service list; the slice records that absence, not a setting.";
+} else if (fact.service_codes.includes("CSTM-00")) {
+  serviceCodesValue = fact.service_codes.join(", ");
+  serviceCodesNote =
+    "“CSTM-00” is a payer-custom sentinel published in place of an explicit list — CMS's schema guidance describes it as covering all service codes, not one setting.";
+} else {
+  const count = fact.service_codes.length;
+  serviceCodesValue = `${count} CMS place-of-service code${count === 1 ? "" : "s"}`;
+  serviceCodesNote =
+    "Broad CMS place-of-service context — not a specific care setting.";
+}
+
 const rows: { label: string; value: string; note: string; kind?: string }[] = [
   {
     label: "amount",
@@ -50,8 +71,8 @@ const rows: { label: string; value: string; note: string; kind?: string }[] = [
   },
   {
     label: "service_codes",
-    value: `${fact.service_codes.length} place-of-service codes`,
-    note: "Broad CMS place-of-service context — not a specific care setting.",
+    value: serviceCodesValue,
+    note: serviceCodesNote,
   },
   {
     label: "provider_group_id",
