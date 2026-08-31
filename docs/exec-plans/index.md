@@ -6,7 +6,7 @@ Last updated: 2026-08-30
 
 | Plan | Domain | Priority | Status | Next action |
 | --- | --- | --- | --- | --- |
-| [007-tic-pricing-slice-anatomy-lab.md](active/007-tic-pricing-slice-anatomy-lab.md) | labs | P1 | active | R1–R6 repaired and re-validated on `feature/007-tic-anatomy-lab`; re-review the repairs if desired, then Siew: claim-wording + strip-plot review, push the pipelines commits, approve the merge to `main` (the publish trigger) |
+| [007-tic-pricing-slice-anatomy-lab.md](active/007-tic-pricing-slice-anatomy-lab.md) | labs | P1 | active | Siew approved wording, strip plot, and publication; commit/push the reviewed repairs, merge to main, verify GitHub Pages and the live artifact, then close out |
 
 ## Blocked
 

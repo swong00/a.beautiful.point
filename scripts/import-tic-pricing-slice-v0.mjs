@@ -37,24 +37,57 @@ const PROJECTED_FACT_FIELDS = [
 // (`git show <release>:<path> | shasum -a 256`); per-code values were pinned
 // after the 2026-08-30 independent full reconciliation of every fact against
 // the release slice (exporter output is byte-deterministic for a release).
+// `source_metadata` is pinned the same way -- read back out of the release
+// slice at `git show <release>:<slice path>` as the fields constant across all
+// 12,183 facts, plus the sorted distinct `source_file_path` lineage -- because
+// those values are the page's public lineage claims and appear in no hashed
+// per-code payload; without a pin, a manifest could restate the payer,
+// reporting month, or source URLs while every file hash still verified.
 // A manifest that disagrees with its release's descriptor is refused outright.
 const RELEASE_PINS = {
   b69ad4fd10fb128af66ffe48768c8a7f115b4d16: {
     sources: {
       slice: {
+        path: "domains/transparency-in-coverage/public-contract/pricing-slice-v0.jsonl",
         sha256: "8e03a7773aa59af713b39119d15f30dfe7aa3125b27a8e0479ed6c36f1199683",
         byte_size: 14177310,
+        row_count: 12183,
       },
       header: {
+        path: "domains/transparency-in-coverage/public-contract/pricing-slice-v0-header.json",
         sha256: "dd12bf1d2619ede1bec98283eac2c6aba35a67556d76375fa0a6e1d1fdeef851",
         byte_size: 382,
       },
       validation_report: {
+        path: "domains/transparency-in-coverage/data/reports/pricing-slice-v0-validation-report.json",
         sha256: "cf20af7be0a4de90cb7ef8d5b5f669a35432b0e7af63e40699532995bee1cfbd",
         byte_size: 1720,
       },
     },
     total_row_count: 12183,
+    source_metadata: {
+      payer: "Cigna",
+      geography: "CO",
+      reporting_month: "2026-07",
+      currency_assumption: "USD",
+      currency_source_status: "not_stated_in_source_schema",
+      freshness_status: "source_file_as_of_reported_month_not_currentness_claim",
+      plan_attribution_status: "not_observed_in_slice_non_selecting",
+      billing_code_type: "CPT",
+      billing_code_type_version: "2026",
+      schema_version: "transparency-in-coverage-pricing-slice/v0",
+      source_last_updated_on: null,
+      source_files: [
+        "https://d25kgz5rikkq4n.cloudfront.net/cost_transparency/state_mrf/CO/in-network-rates/reporting_month=2026-07/2026-07-01_CO_cigna-health-life-insurance-company_colorado-cpop_in-network-rates.json.gz",
+        "https://d25kgz5rikkq4n.cloudfront.net/cost_transparency/state_mrf/CO/in-network-rates/reporting_month=2026-07/2026-07-01_CO_cigna-health-life-insurance-company_denver-co-connect-network_in-network-rates.json.gz",
+        "https://d25kgz5rikkq4n.cloudfront.net/cost_transparency/state_mrf/CO/in-network-rates/reporting_month=2026-07/2026-07-01_CO_cigna-health-life-insurance-company_health-care-alliance-of-the-front-range_in-network-rates.json.gz",
+        "https://d25kgz5rikkq4n.cloudfront.net/cost_transparency/state_mrf/CO/in-network-rates/reporting_month=2026-07/2026-07-01_CO_cigna-health-life-insurance-company_localplus_in-network-rates.json.gz",
+        "https://d25kgz5rikkq4n.cloudfront.net/cost_transparency/state_mrf/CO/in-network-rates/reporting_month=2026-07/2026-07-01_CO_cigna-health-life-insurance-company_national-oap_in-network-rates.json.gz",
+        "https://d25kgz5rikkq4n.cloudfront.net/cost_transparency/state_mrf/CO/in-network-rates/reporting_month=2026-07/2026-07-01_CO_cigna-health-life-insurance-company_national-ppo_in-network-rates.json.gz",
+        "https://d25kgz5rikkq4n.cloudfront.net/cost_transparency/state_mrf/CO/in-network-rates/reporting_month=2026-07/2026-07-01_CO_cigna-health-life-insurance-company_pathwell-oap_in-network-rates.json.gz",
+        "https://d25kgz5rikkq4n.cloudfront.net/cost_transparency/state_mrf/CO/in-network-rates/reporting_month=2026-07/2026-07-01_CO_cigna-health-life-insurance-company_pathwell-ppo_in-network-rates.json.gz",
+      ],
+    },
     codes: {
       "45378": { sha256: "5d9548cce80711cc9068d76127a6c83d54973c3687347001df68780868d5a9f9", byte_size: 161279, row_count: 371 },
       "70450": { sha256: "9eb260eadba3c367ea677e7bc9760a8d26ca823d687190dbddaf3ac8a8accb0f", byte_size: 188111, row_count: 530 },
@@ -108,6 +141,20 @@ const expectedRelease = args["expected-release"];
 
 const sha256 = (buffer) => createHash("sha256").update(buffer).digest("hex");
 
+// Value-equality serialization: object keys are ordered so key order alone
+// never reads as tampering, while array order stays significant (the exporter
+// writes source_files sorted).
+const canonicalJson = (value) => {
+  if (Array.isArray(value)) return `[${value.map(canonicalJson).join(",")}]`;
+  if (value !== null && typeof value === "object") {
+    return `{${Object.keys(value)
+      .sort()
+      .map((key) => `${JSON.stringify(key)}:${canonicalJson(value[key])}`)
+      .join(",")}}`;
+  }
+  return JSON.stringify(value) ?? "null";
+};
+
 const manifestPath = path.join(packageDir, "manifest.json");
 if (!fs.existsSync(manifestPath)) {
   console.error(`blocking: missing manifest: ${manifestPath}`);
@@ -141,16 +188,50 @@ for (const source of ["slice", "header", "validation_report"]) {
     declared?.sha256 === pinned.sha256 && declared?.byte_size === pinned.byte_size,
     `Manifest ${source} hash/size do not match the trusted release descriptor (declared ${declared?.sha256}/${declared?.byte_size}, pinned ${pinned.sha256}/${pinned.byte_size}).`,
   );
+  // The path is republished in release.json as the lineage of the hash beside
+  // it, so it is pinned rather than accepted as declared.
+  const differingFields = Object.keys(pinned)
+    .filter((field) => canonicalJson(declared?.[field]) !== canonicalJson(pinned[field]))
+    .sort();
+  check(
+    differingFields.length === 0,
+    `Manifest ${source} declaration does not match the trusted release descriptor (differing: ${differingFields.join(", ")}).`,
+  );
 }
 check(
   manifest.totals?.row_count === pins.total_row_count,
   `Manifest total row count ${manifest.totals?.row_count} does not match the trusted release descriptor's ${pins.total_row_count}.`,
 );
-check(
-  Array.isArray(manifest.source_metadata?.source_files) &&
-    manifest.source_metadata.source_files.length > 0,
-  "Manifest is missing source-file lineage.",
-);
+// The page states its payer, geography, reporting month and source-file
+// lineage straight out of source_metadata, and none of it is covered by a
+// per-code payload hash, so it is compared against the pinned descriptor.
+const declaredMetadata = manifest.source_metadata;
+if (
+  declaredMetadata === null ||
+  typeof declaredMetadata !== "object" ||
+  Array.isArray(declaredMetadata)
+) {
+  blockers.push(
+    "Manifest is missing source_metadata; the page's public lineage claims are unverifiable.",
+  );
+} else {
+  const differing = [
+    ...new Set([
+      ...Object.keys(pins.source_metadata),
+      ...Object.keys(declaredMetadata),
+    ]),
+  ]
+    .filter(
+      (field) =>
+        canonicalJson(declaredMetadata[field]) !==
+        canonicalJson(pins.source_metadata[field]),
+    )
+    .sort();
+  check(
+    differing.length === 0,
+    `Manifest source_metadata does not match the trusted release descriptor (differing: ${differing.join(", ")}); these values are the page's public lineage claims.`,
+  );
+}
 
 const declaredCodes = Object.keys(manifest.codes ?? {}).sort();
 check(
