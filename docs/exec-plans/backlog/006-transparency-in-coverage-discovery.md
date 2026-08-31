@@ -1,17 +1,17 @@
 # 006 - Transparency In Coverage Discovery
 
-Status: abandoned — superseded by the pipeline repo's completed discovery through public contract v0 (see `swventure-pipelines/domains/transparency-in-coverage/`); do not execute this plan. Successor: [007-tic-pricing-slice-anatomy-lab.md](../active/007-tic-pricing-slice-anatomy-lab.md), activated 2026-08-30.
+Status: abandoned — superseded by the pipeline repo's completed discovery through public contract v0 (see `swventure-pipelines/domains/transparency-in-coverage/`); do not execute this plan. Successor: [007-tic-pricing-slice-anatomy-lab.md](../completed/007-tic-pricing-slice-anatomy-lab.md), activated 2026-08-30.
 Domain: data
 Priority: P1
 Created: 2026-05-31
 Last updated: 2026-08-30
 Owner/driver: mixed
 Branch: N/A
-Related: [active successor 007](../active/007-tic-pricing-slice-anatomy-lab.md), [pipeline public contract v0](../../../../pipelines/domains/transparency-in-coverage/public-contract/README.md)
+Related: [completed successor 007](../completed/007-tic-pricing-slice-anatomy-lab.md), [pipeline public contract v0](../../../../pipelines/domains/transparency-in-coverage/public-contract/README.md)
 
 ## Fresh Session Kickoff
 
-This plan is retired; do not resume its original discovery sequence. Use [active successor 007](../active/007-tic-pricing-slice-anatomy-lab.md).
+This plan is retired; do not resume its original discovery sequence. Use [completed successor 007](../completed/007-tic-pricing-slice-anatomy-lab.md).
 
 Current state:
 

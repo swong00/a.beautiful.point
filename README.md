@@ -20,12 +20,13 @@ The editorial promise is simple:
 
 ## Current State
 
-This repository now has its first static public site skeleton:
+The public site is live and includes:
 
 - Astro `6.3.3` with MDX enabled.
 - Local MDX content collections for manifesto, essays, visuals, labs, and notes.
 - Static routes for `/`, `/manifesto`, `/essays`, `/visuals`, `/labs`, `/notes`, and `/about`.
 - A shared layout, minimal visual identity, and first system-map visual.
+- [Anatomy of a Published Healthcare Rate](https://abeautifulpoint.com/labs/anatomy-of-a-published-healthcare-rate/): an approved TiC lab with an annotated record, faceted plot, table excerpts, and fifteen static per-code routes, built from checked-in assets without client JavaScript.
 
 Local environment resolved on 2026-05-17:
 

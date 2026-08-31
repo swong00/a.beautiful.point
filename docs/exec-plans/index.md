@@ -6,7 +6,7 @@ Last updated: 2026-08-30
 
 | Plan | Domain | Priority | Status | Next action |
 | --- | --- | --- | --- | --- |
-| [007-tic-pricing-slice-anatomy-lab.md](active/007-tic-pricing-slice-anatomy-lab.md) | labs | P1 | active | Siew approved wording, strip plot, and publication; commit/push the reviewed repairs, merge to main, verify GitHub Pages and the live artifact, then close out |
+| N/A | N/A | N/A | N/A | N/A |
 
 ## Blocked
 
@@ -26,6 +26,7 @@ Last updated: 2026-08-30
 
 | Plan | Domain | Completed | Evidence |
 | --- | --- | --- | --- |
+| [007-tic-pricing-slice-anatomy-lab.md](completed/007-tic-pricing-slice-anatomy-lab.md) | labs | 2026-08-30 | Human-approved publication; 57/57 tests, 640 reconciled table rows, Pages run 33359164922, all 33 live routes/assets match the build |
 | [001-static-site-skeleton.md](completed/001-static-site-skeleton.md) | site | 2026-05-17 | `pnpm run check`, `pnpm run build`, and local browser route smoke checks passed |
 | [005-homepage-way-of-code-redesign.md](completed/005-homepage-way-of-code-redesign.md) | site | 2026-05-23 | `pnpm run check`, `pnpm run build`, and desktop/mobile homepage browser smoke checks passed |
 

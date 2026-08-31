@@ -1,6 +1,6 @@
 # Analysis Brief — Anatomy of a Published Healthcare Rate
 
-Status: approved repository review artifact for [exec plan 007](../exec-plans/active/007-tic-pricing-slice-anatomy-lab.md). This brief is not a published deliverable; it fixes the claims boundary the lab page must respect. Siew approved the reviewed page wording, retained strip plot, and publication on 2026-08-30 ("approve, push, merge and publish").
+Status: approved repository review artifact for [exec plan 007](../exec-plans/completed/007-tic-pricing-slice-anatomy-lab.md). This brief is not a published deliverable; it fixes the claims boundary the lab page must respect. Siew approved the reviewed page wording, retained strip plot, and publication on 2026-08-30 ("approve, push, merge and publish").
 
 Created: 2026-08-30
 Source of authority: pipeline public contract v0 (`pipelines/domains/transparency-in-coverage/public-contract/README.md`, approved 2026-08-24), release pin `b69ad4fd10fb128af66ffe48768c8a7f115b4d16`.

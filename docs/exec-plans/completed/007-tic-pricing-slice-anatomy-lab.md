@@ -1,12 +1,12 @@
 # 007 - TiC Pricing Slice Anatomy Lab
 
-Status: active
+Status: completed
 Domain: labs
 Priority: P1
 Created: 2026-08-30
 Last updated: 2026-08-30
 Owner/driver: mixed
-Branch: `feature/007-tic-anatomy-lab`
+Branch: `feature/007-tic-anatomy-lab` merged to `main` at `faad44734fe28ce531c23deecd22666f826c79c2`
 Related: [006-transparency-in-coverage-discovery.md](../backlog/006-transparency-in-coverage-discovery.md) (superseded by pipeline work), [pipeline contract v0](../../../../pipelines/domains/transparency-in-coverage/public-contract/README.md), [completed pipeline release-repair plan](../../../../pipelines/docs/exec-plans/completed/transparency-in-coverage-pricing-slice-v0-release-repair.md) — cross-repo links resolve in the swventure workspace layout
 
 ## Fresh Session Kickoff
@@ -23,23 +23,14 @@ Read these first:
 
 Current state:
 
-- What already exists:
-  - The pipeline repo holds pricing slice v0: `12,183` retained Cigna Colorado monetary negotiated-rate facts across fifteen exact CPT codes (July 2026 files), with public contract v0 approved 2026-08-24. The completed repair is pinned at `b69ad4fd10fb128af66ffe48768c8a7f115b4d16` (pushed; verified reachable from `origin/main` 2026-08-30); its v3 validator records all ten checks passing.
-  - This site has a working Astro/MDX lab surface (`src/content/labs`, `src/pages/labs`) but no TiC page, importer, or assets. There is no finished homelessness asset importer to copy.
-  - Plan 006 (metadata-first TiC discovery, May 2026) is superseded: the pipeline completed discovery, cataloging, canonical modeling, and the first public contract.
-- What is known to work: `pnpm run check` and `pnpm run build` on the existing site.
-- What is known broken or incomplete: nothing on this side — the plan starts from zero consumer code.
-- Execution state 2026-08-30 (branch `feature/007-tic-anatomy-lab`): analysis brief, exporter (in `pipelines`, committed locally after `b69ad4f`, **not yet pushed**), pinned importer, checked-in verified assets, and the zero-JS lab page with 15 per-code routes are implemented and validated; strip-plot inclusion and exact claim wording await Siew's review; merge to `main` (the publish trigger) awaits Siew's approval.
-- Independent implementation review 2026-08-30: keep active; repair findings R1–R6 in Audit Notes before requesting publication approval. Current assets reconcile exactly, but exporter destination safety, importer hash anchoring, source-versus-slice wording, service-code sentinel handling, and strip-plot accessibility need correction. Review changed plan/index documentation only, not implementation or approved data.
-- Repairs R1–R6 implemented and re-validated 2026-08-30 (same session, later): exporter destination safety with previous-package preservation (pipelines suite now 55/55), importer trusted release descriptor refusing both reproduced manifest attacks, slice-versus-format wording corrected in the MDX intro and caveat block, `CSTM-00` rendered verbatim with its sentinel explanation, strip-plot facet/axis labels moved to HTML text (≈11.5–11.8 CSS px at 375 px viewport), and the accessible chart text now names the $0–axis-max scale as axis range, not observed amounts. Evidence per step below; checked-in assets byte-unchanged throughout.
-- Independent repair re-review 2026-08-30: R2/R4/R5/R6 verified closed. The original R1 protected-input/rollback cases and R3 source/payload tamper cases now pass, but two narrower P2 gaps remain: R1a (undeclared JSON under an existing package's `codes/` is silently deleted) and R3a (shared source metadata is not pinned). Repair these before closing exporter/import validation; current committed data remains correct and unchanged. See the repair re-review in Audit Notes.
-- Repairs R1a/R3a implemented and validated 2026-08-30 (same session, later): exporter previous-package recognition narrowed to the exact written shape (`manifest.json` + `codes/` holding exactly the fifteen contract files), so an added `codes/review-notes.json` is now refused rather than deleted; importer pins the complete `source_metadata` block and the source path/row-count declarations, derived independently from the release slice at `git show b69ad4f:<slice>`. Pipelines suite 57/57 (two new exporter tests, both confirmed failing against the pre-repair exporter). Checked-in assets byte-unchanged.
-- Independent closure review 2026-08-30: R1a and R3a verified closed in the **uncommitted working-tree repairs** atop site `35c27b6` and pipelines `7d96342`; no new blocking findings in this repair scope. Commit these repairs before any push/merge. The existing human wording/plot and publication gates remain open; this review does not authorize deployment.
-- Publication authorization 2026-08-30: Siew explicitly directed "approve, push, merge and publish" after independent review closed all findings. This approves the reviewed claim wording and retained strip plot, committing/pushing the repairs in both repositories, merging the site feature branch to `main`, and the existing GitHub Pages deployment. Publication execution is in progress.
-- Publication preflight 2026-08-30: the reviewed implementation hashes are unchanged; `pnpm run check` and the 27-page build pass with the approved `ready` status; pipeline offline suite is 57/57; all code-asset hashes/counts/sizes remain correct. Pipeline fixes committed as `3b046a8` and pushed to `origin/main` together with `34f42f7` and `7d96342`.
-- Last validation command: `pnpm run check && pnpm run build`, pipelines offline test suite, importer negative tests, gzip payload measurements, browser smoke on the built site (see step evidence).
-- Last validation result: check 0 errors/warnings/hints, build 27 pages, pipelines suite 57/57, all 640 displayed table rows exact across 16 routes, current data hashes unchanged, zero client JS; R1a and R3a negative cases now refuse before replacement. Implementation-side exporter/import validation is closed; human wording/plot review and publication approval remain open.
-- External state or access needed: release pin `b69ad4fd10fb128af66ffe48768c8a7f115b4d16` verified reachable from `pipelines` `origin/main` on 2026-08-30 (`git merge-base --is-ancestor` passes); re-run that check at activation. An earlier draft pinned `a7c6c80`, which was amended (message-only; identical tree) into `b69ad4f` before pushing — the old hash is orphaned and must not be used. The raw slice is `14.2 MB` JSONL — never shipped whole to the browser.
+- **Published 2026-08-30:** [Anatomy of a Published Healthcare Rate](https://abeautifulpoint.com/labs/anatomy-of-a-published-healthcare-rate/), including the approved strip plot and fifteen per-code routes. The content status is `ready`.
+- Siew approved the reviewed wording, strip plot, commits, pushes, merge, and publication in this task: "approve, push, merge and publish". All review findings, including R1a/R3a, are closed.
+- Pipeline main includes exporter implementation `34f42f7`, safety repair `7d96342`, and final repair `3b046a803a61727038653cbc69848a45f45aaf18`; all were pushed. The data release remains pinned to `b69ad4fd10fb128af66ffe48768c8a7f115b4d16`.
+- Site feature branch was pushed and merged into main at `faad44734fe28ce531c23deecd22666f826c79c2`. [GitHub Pages run 33359164922](https://github.com/swong00/a.beautiful.point/actions/runs/33359164922) passed build and deployment.
+- GitHub rejected the first site pushes under email privacy protection. Only unpublished author/committer email metadata was replaced with the account's GitHub noreply address; trees, messages, attribution, and dates were preserved. Hash mapping: `136579c` → `d25ed15`, `35c27b6` → `7799789`, `3f6fcee` → `9e459e3`, unpublished merge `534f736` → `faad447`. The original local refs remain under `codex/pre-email-privacy-*`; no remote history was force-pushed and no privacy protection was disabled.
+- Final validation: pipeline offline suite **57/57**; Astro check **0 errors/warnings/hints**; build **27 pages**; **640/640** table rows and all dot counts reconciled; public data unchanged; zero client JavaScript.
+- Live validation: **33/33** URLs returned HTTP **200** and matched the built bytes exactly (16 lab routes, labs index, manifest, 15 code files). Browser verified the default record, 70450 sentinel, 77067 facets, normal navigation, 375px mobile layout, and no captured errors.
+- Plan 006 is superseded. No implementation or publication blocker remains. Native screen-reader acceptance was not performed; this validation limit and the intentionally deferred work remain recorded below.
 - Known traps:
   - The contract's claims boundary permits only retained facts and per-code row counts: no comparisons, rankings, medians, averages, "cheapest" claims, provider search, or representative-market framing.
   - One dot/record means one retained source fact, never one provider; `provider_group_id` values are release-scoped opaque source contexts.
@@ -108,7 +99,7 @@ Payload acceptance is measured from the production build with `gzip -9` on the e
 | Optional strip plot (one dot = one retained fact) | done | Reviewed before inclusion; faceted or labeled so negotiated types and billing classes are never silently mixed | Implemented as build-time SVG dots faceted by billing class × negotiated type (99204: 1,978 + 16 = 1,994 ✓; 77067 three facets, 1,191 dots ✓), $0-anchored axis, deterministic fact_key jitter. **R5** repaired: facet and axis labels are HTML text at fixed size (measured ≈11.5–11.8 CSS px at a 375 px viewport, was ≈4.8 px scaled SVG text); dot SVGs are `aria-hidden` decoration with the information carried by the labels and figcaption. **R6** repaired: the figcaption names the $0–max scale explicitly as "the axis range, not observed amounts"; no accessible text claims observed endpoints. **Approved by Siew on 2026-08-30; retain the reviewed strip plot.** |
 | Displayed-record reconciliation | done | Machine reconciliation proves every exported field against every contract fact; sampled browser checks across codes prove the rendered values use those checked-in assets without transformation | Machine chain: exporter full-row reconciliation + importer hash verification + build-time row-count asserts in `src/lib/tic-pricing-slice.ts`. Sampled browser checks (built site, preview server): 99204, 45378, 77067 — first rendered table row and annotated amount equal the checked-in asset's first fact in fact_key order; facet counts sum to asset row counts; selector marks the current code. |
 | Claims-wording, accessibility, and mobile review | done | Exact public text reviewed by Siew; keyboard/screen-reader pass; mobile layout checked | Agent-side pass done and redone after R5/R6: no JS so all interaction is native links; table excerpt is a labeled focusable scroll region (`tabindex=0`, `role=region`, `aria-label`); strip-plot information lives in HTML facet labels + figcaption (dot SVGs `aria-hidden`); single h1 per page; mobile 375 px re-verified after the label repair — no horizontal body scroll, plot labels legible, last axis tick contained. Note: this is DOM/keyboard/visual inspection, not a native screen-reader acceptance pass. **Siew approved the reviewed public text and publication on 2026-08-30** (see analysis brief); the documented native screen-reader validation limitation remains explicit. |
-| Publish gate + closeout | in-progress | `pnpm run check`, `pnpm run build`, local browser smoke on the feature branch; Siew approves the finished artifact at the merge-to-`main` trigger (the push deploys); 006 marked superseded | `pnpm run check` 0 errors; `pnpm run build` 27 pages; browser smoke on the built site passed (parent + per-code routes + labs listing card). Work is on branch `feature/007-tic-anatomy-lab`; Siew approved merge/publication on 2026-08-30; deployment and live verification are in progress. 006 already marked superseded at activation. |
+| Publish gate + closeout | done | `pnpm run check`, `pnpm run build`, local browser smoke on the feature branch; Siew approves the finished artifact at the merge-to-`main` trigger (the push deploys); 006 marked superseded | `pnpm run check` 0 errors; `pnpm run build` 27 pages; browser smoke on the built site passed (parent + per-code routes + labs listing card). Work is on branch `feature/007-tic-anatomy-lab`; Siew approved merge/publication on 2026-08-30. Merged at `faad447`; GitHub Pages run `33359164922` succeeded; all 33 live routes/assets match the built bytes and browser checks pass. 006 already marked superseded at activation. |
 
 ## Validation Commands
 
@@ -167,20 +158,22 @@ Merging to `main` is the publish trigger — the Pages workflow deploys every `m
 | 2026-08-30 | Close R3a by pinning the whole `source_metadata` block (plus source paths) rather than a canonical manifest digest | The page's public lineage claims come from these values and appear in no hashed payload, while `generated_at` must stay variable; pinning the stable block directly names which field disagrees in the refusal message, where a whole-manifest digest would only say the manifest changed. Values were read back out of the release slice, not copied from the manifest under test. |
 | 2026-08-30 | Independent review accepts R1a/R3a closure and deliberate refusal of incomplete export packages | Live reproductions now preserve unexpected/incomplete packages, legitimate export/re-export succeeds, and metadata/path mutations refuse before import replacement. An operator can use a fresh output directory for recovery; no relaxation of destination safety is needed. |
 | 2026-08-30 | Siew approves the reviewed artifact, retains the strip plot, and directs commit/push/merge/publication | Explicit user instruction after closure of all review findings: "approve, push, merge and publish". Mark the lab ready and use the existing GitHub Pages workflow; no hosting migration or new infrastructure. |
+| 2026-08-30 | Publish the approved artifact through existing GitHub Pages and close 007 after live reconciliation | The site merge deployed successfully; all 33 live routes/assets match the validated build. Preserve the data release pin and transfer non-blocking tooling follow-ups. |
 
 ## Follow-Up Register
 
 | Item | Source | Classification | Priority | Suggested destination | Status |
 | --- | --- | --- | --- | --- | --- |
 | Retire plan 006 formally when this plan activates | Plan creation | blocks-current-plan | P2 | This plan's activation step | done — 2026-08-30 |
-| Reader-facing explainer on how TiC files are produced (background essay) | Anatomy framing | nice-to-have | P3 | Content backlog | open |
+| Reader-facing explainer on how TiC files are produced (background essay) | Anatomy framing | nice-to-have | P3 | Future content backlog if prioritized | intentionally deferred — independent of the published anatomy lab |
 | Push the pipelines exporter commits to `origin/main` | Exporter implementation 2026-08-30 | needed-before-prod | P2 | Pipeline main | done — 2026-08-30, remote main includes `34f42f7`, `7d96342`, and `3b046a8` |
-| `pnpm add` fails in this repo with a pnpm store-location mismatch (node_modules installed from a different store than pnpm 11.1.2 now uses) | Tooling friction during implementation | tech-debt | P3 | tech-debt-tracker or a fresh `pnpm install` after store config decision | open |
+| `pnpm add` fails in this repo with a pnpm store-location mismatch (node_modules installed from a different store than pnpm 11.1.2 now uses) | Tooling friction during implementation | tech-debt | P3 | [tech-debt-tracker](../tech-debt-tracker.md) | transferred — existing check/build and clean CI installation pass |
 | R1: reject exporter destinations that contain protected inputs or unrelated files; preserve previous output on replacement failure | Independent implementation review | blocks-current-plan | P2 | This plan's bounded pipeline exporter change | done — 2026-08-30 (P1 protection/rollback verified; R1a closed by restricting recognition to the fifteen expected code files) |
 | R2: distinguish omissions in this slice from limitations of the source format | Independent implementation review | blocks-current-plan | P1 | MDX introduction and shared caveat block | done — 2026-08-30 (intro + caveat reworded to slice omissions vs format capability) |
 | R3: anchor importer source/asset hashes to trusted release expectations | Independent implementation review | blocks-current-plan | P2 | Pinned importer and focused negative validation | done — 2026-08-30 (original tamper cases refused; R3a closed by pinning the full `source_metadata` and source path declarations) |
 | R4: preserve/explain `CSTM-00` and missing service-code context instead of treating array length as service coverage | Independent implementation review | blocks-current-plan | P2 | Annotated record | done — 2026-08-30 (sentinel verbatim + explanation; empty list = "none published") |
 | R5–R6: make strip-plot labels readable on mobile and stop describing axis endpoints as observed amounts | Independent implementation review | blocks-current-plan | P2 | Optional strip plot; remove if human review drops it | done — 2026-08-30 (HTML labels ≈11.5–11.8 px at 375 px; figcaption names axis range as axis limits) |
+| Pages workflow warns that `actions/configure-pages@v5` and `pnpm/action-setup@v4` target the deprecated Node 20 action runtime, currently forced to Node 24 | Successful publication run 33359164922 | tech-debt | P3 | [tech-debt-tracker](../tech-debt-tracker.md) | transferred — warning only; both build and deployment succeed |
 
 ## Audit Notes
 
@@ -269,18 +262,11 @@ Verdict: **[PASS] R1a and R3a closed; no new blocking findings in the repair sco
 
 ## Closeout
 
-Final validation:
+Completed: 2026-08-30. Human authorization: Siew's explicit "approve, push, merge and publish" following independent closure of every review finding.
 
-- Command:
-- Result:
-- Evidence:
-
-Follow-ups transferred:
-
-- Item:
-- Destination:
-- Priority:
-
-Residual risk:
-
--
+- **Published artifact:** [Anatomy of a Published Healthcare Rate](https://abeautifulpoint.com/labs/anatomy-of-a-published-healthcare-rate/), default CPT 99204 plus fifteen per-code routes; approved strip plot retained, content marked ready.
+- **Source publication:** pipeline exporter repairs pushed through `3b046a8`; site branch pushed and merged at `faad447`. Existing GitHub Pages deployment [33359164922](https://github.com/swong00/a.beautiful.point/actions/runs/33359164922) completed successfully. Data release pin `b69ad4f` and every checked-in asset remain unchanged.
+- **Validation:** `pnpm run check` 0 errors/warnings/hints; `pnpm run build` 27 static pages; pipeline offline suite 57/57; all 640 table rows exact; 21 importer negative cases refuse before replacement; exporter unexpected/incomplete-package refusals preserve prior files; valid export/import/re-export succeed. Default route and data stay well below the payload limits and emit no client JavaScript.
+- **Live gate:** 33 HTTPS requests returned 200 with response bytes identical to `dist/`: labs index, default lab, fifteen per-code pages, release manifest, and fifteen code files. Browser confirmed the $186.82 default record and 40-row excerpt, all 15 selector links, correct 70450 `CSTM-00` explanation, 77067's 1,191 dots across three facets, no body overflow at 375px, and no captured errors. Temporary viewport override reset.
+- **Follow-ups:** local pnpm store configuration and GitHub Actions runtime warnings transferred to `docs/exec-plans/tech-debt-tracker.md`; the optional background essay is intentionally deferred. No blocking follow-up remains.
+- **Residual limits:** native screen-reader acceptance was not performed (DOM, keyboard, and browser checks passed). Published facts remain a bounded July 2026 slice with the documented comparability, missing-context, currency, and currentness caveats. No refresh automation or new infrastructure was introduced.
